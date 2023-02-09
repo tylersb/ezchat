@@ -1,70 +1,39 @@
-# Getting Started with Create React App
+# EZ Chat
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A team communication app that includes channels for group discussions as well as direct messaging options for private conversations.
 
-## Available Scripts
+## Tech Stack
+Nodejs
+React
+Redux
+Firebase
+Semantic-UI
+Moment
 
-In the project directory, you can run:
+## Wireframes
 
-### `npm start`
+## User flow
+The user flow of the EZ Chat app would typically look something like this:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- User signs up or logs in to the app.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- User is presented with the main dashboard, showing a list of all channels.
 
-### `npm test`
+- User can join existing channels or create a new channel by clicking on the "Create Channel" button.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Once the user has joined a channel, they can view all the messages and files shared within that channel.
 
-### `npm run build`
+- User can communicate with other members by posting messages or sending direct messages.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- User can upload files by clicking on the "Upload File" button and selecting a file from their device.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- User can receive notifications for new messages, mentions, and direct messages.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- User can access their profile and settings by clicking on their profile picture.
 
-### `npm run eject`
+- User can log out of the app by clicking on the "Logout" button in the settings section.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## User Stories
+As a user, I want to be able to join different channels and receive notifications for new messages and updates in real-time.
+As a user, I want to be able to send direct messages to other users for private conversations.
+As a user, I want to be able to easily switch between different channels to see updates and communicate with other users.
