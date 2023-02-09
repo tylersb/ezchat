@@ -1,10 +1,10 @@
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   auth,
   registerWithEmailAndPassword,
   signInWithGoogle
-} from './firebase'
+} from '../../firebase'
 import { useEffect, useState } from 'react'
 import '../../styles/Register.css'
 
@@ -15,7 +15,7 @@ export default function Register() {
 
   const [user, loading, error] = useAuthState(auth)
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const register = () => {
     if (!name) alert('Please enter name')
@@ -24,7 +24,7 @@ export default function Register() {
 
   useEffect(() => {
     if (loading) return
-    if (user) history.replace('/dashboard')
+    if (user) navigate('/dashboard')
   }, [user, loading])
 
   return (
