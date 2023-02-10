@@ -7,20 +7,21 @@ import SidePanel from './SidePanel/SidePanel'
 import Messages from './Messages/Messages'
 import MetaPanel from './MetaPanel/MetaPanel'
 import { Grid } from 'semantic-ui-react'
+import Loading from './Loading'
 
 export default function Dashboard() {
-  const [name, setName] = useState('')
+  const [userData, setUserData] = useState('')
 
   const [user, loading] = useAuthState(auth)
 
   const navigate = useNavigate()
 
-  const fetchUserName = useCallback(async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const q = query(collection(db, 'users'), where('uid', '==', user?.uid))
       const doc = await getDocs(q)
       const data = doc.docs[0].data()
-      setName(data.name)
+      setUserData(data)
     } catch (err) {
       console.error(err)
       alert('An error occured while fetching user data')
@@ -30,14 +31,16 @@ export default function Dashboard() {
   useEffect(() => {
     if (loading) return
     if (!user) return navigate('/login')
-    fetchUserName()
-  }, [user, loading, navigate, fetchUserName])
+    fetchUserData()
+  }, [user, loading, navigate, fetchUserData])
+
+  if (loading) return <Loading length={Array(10).fill(1)} />
 
   return (
     <Grid columns="equal" className="app" style={{ background: '#eee' }}>
-      <SidePanel user={user} />
+      <SidePanel userData={userData} />
       <Grid.Column style={{ marginLeft: 320 }}>
-        <Messages user={user} />
+        <Messages userData={userData} />
       </Grid.Column>
       <Grid.Column width={4}>
         <MetaPanel />
