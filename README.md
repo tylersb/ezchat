@@ -79,3 +79,4 @@ Prepare the app for deployment.
 - Avatar customization/custom picture upload
 - Expanded profile details customization
 - Direct chats between users or groups of users
+- Inline video player for links
