@@ -43,7 +43,7 @@ export default function Dashboard() {
         <Messages userData={userData} />
       </Grid.Column>
       <Grid.Column width={4}>
-        <MetaPanel />
+        <MetaPanel userData={userData}/>
       </Grid.Column>
     </Grid>
   )

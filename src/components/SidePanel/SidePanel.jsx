@@ -6,6 +6,7 @@ import UserPanel from './UserPanel'
 // import DirectMessages from './DirectMessages'
 import { useNavigate } from 'react-router-dom'
 import { auth } from '../../firebase'
+import Channels from './Channels'
 
 export default function SidePanel({ userData }) {
 
@@ -26,9 +27,9 @@ export default function SidePanel({ userData }) {
         style={{ background: '#4c3c4c', fontSize: '1.2rem' }}
       >
         <UserPanel userData={userData} handleLogout={handleLogout} />
-        {/* <Starred />
+        {/* <Starred /> */}
         <Channels />
-        <DirectMessages /> */}
+        {/* <DirectMessages /> */}
       </Menu>
     </div>
   )

@@ -1,8 +1,14 @@
 import { useState } from 'react'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { db } from '../../firebase'
-import { query, collection, orderBy } from 'firebase/firestore'
-import { Header, Segment, Comment } from 'semantic-ui-react'
+import {
+  query,
+  collection,
+  orderBy,
+  addDoc,
+  serverTimestamp
+} from 'firebase/firestore'
+import { Header, Grid, List, Icon } from 'semantic-ui-react'
 import NewChannelModal from './NewChannelModal'
 
 export default function Channels() {
@@ -10,39 +16,68 @@ export default function Channels() {
     query(collection(db, 'channels'), orderBy('createdAt')),
     { idField: 'id' }
   )
-  const [activeChannel, setActiveChannel] = useState('')
+  const [activeChannelId, setActiveChannelId] = useState('')
+
+  const addNewChannel = async (channel) => {
+    try {
+      await addDoc(collection(db, 'channels'), {
+        ...channel,
+        createdAt: serverTimestamp()
+      })
+    } catch (err) {
+      console.error(err)
+      alert('An error occured while creating a new channel')
+    }
+  }
 
   const handleChannelClick = (channel) => {
-    setActiveChannel(channel)
+    setActiveChannelId(channel.id)
   }
 
   const displayChannels = channels?.map((channel) => {
     return (
-      <Segment
+      <List.Item
         key={channel.id}
         onClick={() => handleChannelClick(channel)}
-        style={{ cursor: 'pointer' }}
-        color={channel.id === activeChannel?.id ? 'teal' : 'black'}
+        style={{ cursor: 'pointer', marginLeft: '2em' }}
+        active={channel.id === activeChannelId}
       >
         # {channel.name}
-      </Segment>
+      </List.Item>
     )
   })
 
-  const displayChannelName = activeChannel?.name ? (
-    <Header as="h2" textAlign="center">
-      <span># {activeChannel.name}</span>
-    </Header>
-  ) : null
-
   return (
     <>
-      <NewChannelModal />
-      <Header as="h2" textAlign="center">
-        <span>Channels</span>
-      </Header>
-      {displayChannels}
-      {displayChannelName}
+      <Grid justifyContent="center" verticalAlign="middle">
+        <Grid.Row
+          style={{ padding: '0', height: '1.5em', marginBottom: '.4em' }}
+        >
+          <Grid.Column floated="left">
+            <Icon
+              name="caret down"
+              size="med"
+              style={{
+                cursor: 'pointer',
+                marginLeft: '2em',
+                display: 'inline'
+              }}
+            />
+            <Header as="h4" style={{ display: 'inline' }}>
+              Channels
+            </Header>
+          </Grid.Column>
+          <Grid.Column floated="right">
+            <NewChannelModal
+              addNewChannel={addNewChannel}
+              style={{ height: '1.5em' }}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+      <List animated divided verticalAlign="middle">
+        {displayChannels}
+      </List>
     </>
   )
 }
