@@ -3,6 +3,10 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { useNavigate } from 'react-router-dom'
 import { auth, db, logout } from '../firebase'
 import { query, collection, getDocs, where } from 'firebase/firestore'
+import SidePanel from './SidePanel/SidePanel'
+import Messages from './Messages/Messages'
+import MetaPanel from './MetaPanel/MetaPanel'
+import { Grid } from 'semantic-ui-react'
 
 export default function Dashboard() {
   const [name, setName] = useState('')
@@ -30,15 +34,14 @@ export default function Dashboard() {
   }, [user, loading, navigate, fetchUserName])
 
   return (
-    <div className="dashboard">
-      <div className="dashboard__container">
-        Logged in as
-        <div>{name}</div>
-        <div>{user?.email}</div>
-        <button className="dashboard__btn" onClick={logout}>
-          Logout
-        </button>
-      </div>
-    </div>
+    <Grid columns="equal" className="app" style={{ background: '#eee' }}>
+      <SidePanel user={user} />
+      <Grid.Column style={{ marginLeft: 320 }}>
+        <Messages user={user} />
+      </Grid.Column>
+      <Grid.Column width={4}>
+        <MetaPanel />
+      </Grid.Column>
+    </Grid>
   )
 }
