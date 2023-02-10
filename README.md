@@ -68,3 +68,14 @@ Day 5:
 Implement the profile and settings screens, allowing users to update their profile information and change their password.
 Test and debug the app to ensure all features are working correctly.
 Prepare the app for deployment.
+
+## MVP
+- Secure user account creation/authentication and password reset.
+- Users given random default avatar on account creation.
+- Channels for users to send and view messages in.
+
+## Stretch Goals
+- Ability to upload files
+- Avatar customization/custom picture upload
+- Expanded profile details customization
+- Direct chats between users or groups of users
