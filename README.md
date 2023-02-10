@@ -17,6 +17,9 @@ A chat app that includes channels for group discussions as well as direct messag
 - Direct Message View
 ![dm_wireframe](./public/dm_wireframe.PNG)
 
+## ERD
+![erd](./public/erd.png)
+
 
 ## User flow
 The user flow of the EZ Chat app would typically look something like this:
