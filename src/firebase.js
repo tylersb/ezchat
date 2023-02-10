@@ -18,6 +18,7 @@ import {
   where,
   addDoc
 } from 'firebase/firestore'
+import md5 from 'md5'
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -37,6 +38,19 @@ const db = getFirestore(app)
 const analytics = getAnalytics(app)
 const googleProvider = new GoogleAuthProvider()
 
+const getGravatarURL = (email) => {
+  // Trim leading and trailing whitespace from
+  // an email address and force all characters
+  // to lower case
+  const address = String(email).trim().toLowerCase()
+
+  // Create an MD5 hash of the final string
+  const hash = md5(address)
+
+  // Grab the actual image URL
+  return `https://www.gravatar.com/avatar/${hash}?d=identicon`
+}
+
 const signInWithGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider)
@@ -48,7 +62,8 @@ const signInWithGoogle = async () => {
         uid: user.uid,
         name: user.displayName,
         authProvider: 'google',
-        email: user.email
+        email: user.email,
+        avatar: getGravatarURL(user.email)
       })
     }
   } catch (err) {
@@ -74,7 +89,8 @@ const registerWithEmailAndPassword = async (name, email, password) => {
       uid: user.uid,
       name,
       authProvider: 'local',
-      email
+      email,
+      avatar: getGravatarURL(email)
     })
   } catch (err) {
     console.error(err)

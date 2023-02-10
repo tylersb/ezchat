@@ -6,26 +6,54 @@ import {
   signInWithGoogle
 } from '../../firebase'
 import { useEffect, useState } from 'react'
-import '../../styles/Register.css'
-import { Button, Form, Message } from 'semantic-ui-react'
+import { Form, Message, Segment } from 'semantic-ui-react'
 import Layout from './Layout'
+
+const validate = (email, password, name) => {
+  return {
+    email: email.length === 0,
+    password: password.length === 0,
+    name: name.length === 0
+  }
+}
 
 export default function Register() {
   const [form, setForm] = useState({
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    touched: {
+      name: false,
+      email: false,
+      password: false,
+      confirmPassword: false
+    }
   })
 
   const [user, loading, error] = useAuthState(auth)
 
   const navigate = useNavigate()
 
-  const register = () => {
-    if (
-      form.password !== form.confirmPassword
-    ) {
+  const handleBlur = (field) => (evt) => {
+    setForm({
+      ...form,
+      touched: { ...form.touched, [field]: true }
+    })
+  }
+
+  const errors = validate(form.email, form.password, form.name)
+  const isDisabled = Object.keys(errors).some((x) => errors[x])
+
+  const shouldMarkError = (field) => {
+    const hasError = errors[field]
+    const shouldShow = form.touched[field]
+
+    return hasError ? shouldShow : false
+  }
+
+  const register = (e) => {
+    if (form.password !== form.confirmPassword) {
       alert('Passwords do not match')
       return
     }
@@ -37,6 +65,7 @@ export default function Register() {
       alert('Password must be at least 6 characters')
       return
     }
+    e.preventDefault()
     const { name, email, password } = form
     registerWithEmailAndPassword(name, email, password)
   }
@@ -48,100 +77,75 @@ export default function Register() {
 
   return (
     <Layout header="Sign up to get started">
-      <Form onSubmit={register}>
-      <Form.Input
-        fluid
-        icon="user"
-        iconPosition="left"
-        placeholder="Name"
-        className="auth-input-field"
-        value={form.name}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
-        required
-      />
-      <Form.Input
-        fluid
-        icon="user"
-        iconPosition="left"
-        placeholder="E-mail address"
-        className="auth-input-field"
-        value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-        required
-      />
-      <Form.Input
-        fluid
-        icon="lock"
-        iconPosition="left"
-        placeholder="Password"
-        type="password"
-        className="auth-input-field"
-        value={form.password}
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-        required
-      />
-      <Form.Input
-        fluid
-        icon="lock"
-        iconPosition="left"
-        placeholder="Confirm Password"
-        type="password"
-        className="auth-input-field"
-        value={form.confirmPassword}
-        onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
-        required
-      />
-      <Form.Button color="teal" fluid size="huge"
-      type="submit"
-      >
-        Sign up
-      </Form.Button>
-      </Form>
-        <Form.Button color="teal" fluid size="huge"
-        onClick={signInWithGoogle}
-        >
+      <Segment>
+        <Form onSubmit={register}>
+          <Form.Input
+            fluid
+            icon="user"
+            iconPosition="left"
+            placeholder="Name"
+            className="auth-input-field"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            onBlur={handleBlur('name')}
+            required
+            error={shouldMarkError('name')}
+          />
+          <Form.Input
+            fluid
+            icon="user"
+            iconPosition="left"
+            placeholder="E-mail address"
+            className="auth-input-field"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            onBlur={handleBlur('email')}
+            required
+            error={shouldMarkError('email')}
+          />
+          <Form.Input
+            fluid
+            icon="lock"
+            iconPosition="left"
+            placeholder="Password"
+            type="password"
+            className="auth-input-field"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            onBlur={handleBlur('password')}
+            required
+            error={shouldMarkError('password')}
+          />
+          <Form.Input
+            fluid
+            icon="lock"
+            iconPosition="left"
+            placeholder="Confirm Password"
+            type="password"
+            className="auth-input-field"
+            value={form.confirmPassword}
+            onChange={(e) =>
+              setForm({ ...form, confirmPassword: e.target.value })
+            }
+            required
+          />
+          <Form.Button
+            color="teal"
+            fluid
+            size="huge"
+            type="submit"
+            disabled={isDisabled}
+          >
+            Sign up
+          </Form.Button>
+        </Form>
+        <Form.Button color="teal" fluid size="huge" onClick={signInWithGoogle}>
           Sign Up through Google
         </Form.Button>
+      </Segment>
       <Message size="big">
         <Link to="/login">Already Registered?</Link>
       </Message>
     </Layout>
-    // <div className="register">
-    //   <div className="register__container">
-    //     <input
-    //       type="text"
-    //       className="register__textBox"
-    //       value={name}
-    //       onChange={(e) => setName(e.target.value)}
-    //       placeholder="Full Name"
-    //     />
-    //     <input
-    //       type="text"
-    //       className="register__textBox"
-    //       value={email}
-    //       onChange={(e) => setEmail(e.target.value)}
-    //       placeholder="E-mail Address"
-    //     />
-    //     <input
-    //       type="password"
-    //       className="register__textBox"
-    //       value={password}
-    //       onChange={(e) => setPassword(e.target.value)}
-    //       placeholder="Password"
-    //     />
-    //     <button className="register__btn" onClick={register}>
-    //       Register
-    //     </button>
-    //     <button
-    //       className="register__btn register__google"
-    //       onClick={signInWithGoogle}
-    //     >
-    //       Register with Google
-    //     </button>
-    //     <div>
-    //       Already have an account? <Link to="/">Login</Link> now.
-    //     </div>
-    //   </div>
-    // </div>
   )
 }

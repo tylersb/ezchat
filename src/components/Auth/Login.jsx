@@ -1,19 +1,54 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import '../../styles/Login.css'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import {
   auth,
   signInWithGoogle,
   logInWithEmailAndPassword
 } from '../../firebase'
-import { Button, Form, Message } from 'semantic-ui-react'
+import { Button, Form, Message, Segment } from 'semantic-ui-react'
 import Layout from './Layout'
 
+const validate = (email, password) => {
+  return {
+    email: email.length === 0,
+    password: password.length === 0
+  }
+}
+
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [user, loading, error] = useAuthState(auth)
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+    touched: {
+      email: false,
+      password: false
+    }
+  })
+
+  const handleBlur = (field) => (evt) => {
+    setForm({
+      ...form,
+      touched: { ...form.touched, [field]: true }
+    })
+  }
+
+  const errors = validate(form.email, form.password)
+  const isDisabled = Object.keys(errors).some((x) => errors[x])
+
+  const shouldMarkError = (field) => {
+    const hasError = errors[field]
+    const shouldShow = form.touched[field]
+
+    return hasError ? shouldShow : false
+  }
+
+  const handleLogin = (e) => {
+    if (isDisabled) return
+    e.preventDefault()
+    logInWithEmailAndPassword(form.email, form.password)
+  }
 
   const navigate = useNavigate()
 
@@ -26,82 +61,56 @@ export default function Login() {
   }, [user, loading])
 
   return (
-    <>
-      <Layout header="Dashboard Log in">
-        <Form.Input
-          fluid
-          icon="user"
-          iconPosition="left"
-          placeholder="E-mail address"
-          className="auth-input-field"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Form.Input
-          fluid
-          icon="lock"
-          iconPosition="left"
-          placeholder="Password"
-          type="password"
-          className="auth-input-field"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button
-          color="teal"
-          fluid
-          size="huge"
-          onClick={() => logInWithEmailAndPassword(email, password)}
-        >
-          Log in
-        </Button>
-        <br />
-        <Button color="teal" fluid size="huge" onClick={signInWithGoogle}>
+    <Layout header="Dashboard Log in">
+      <Segment>
+        <Form onSubmit={handleLogin}>
+          <Form.Input
+            fluid
+            icon="user"
+            iconPosition="left"
+            placeholder="E-mail address"
+            className="auth-input-field"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
+            onBlur={handleBlur('email')}
+            error={shouldMarkError('email')}
+          />
+          <Form.Input
+            fluid
+            icon="lock"
+            iconPosition="left"
+            placeholder="Password"
+            type="password"
+            className="auth-input-field"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
+            onBlur={handleBlur('password')}
+            error={shouldMarkError('password')}
+          />
+          <Form.Button
+            color="teal"
+            fluid
+            size="huge"
+            disabled={isDisabled}
+            type="submit"
+          >
+            Log in
+          </Form.Button>
+        </Form>
+        <Form.Button color="teal" fluid size="huge" onClick={signInWithGoogle}>
           Log in with Google
-        </Button>
+        </Form.Button>
+      </Segment>
+      <Segment>
         <Message size="big">
           <Link to="/reset">Forgot Password</Link>
         </Message>
         <Message size="big">
           <Link to="/register">Not Registered?</Link>
         </Message>
-      </Layout>
-      {/* <div className="login">
-        <div className="login__container">
-          <input
-            type="text"
-            className="login__textBox"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="E-mail Address"
-          />
-          <input
-            type="password"
-            className="login__textBox"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-          />
-          <button
-            className="login__btn"
-            onClick={() => logInWithEmailAndPassword(email, password)}
-          >
-            Login
-          </button>
-          <button
-            className="login__btn login__google"
-            onClick={signInWithGoogle}
-          >
-            Login with Google
-          </button>
-          <div>
-            <Link to="/reset">Forgot Password</Link>
-          </div>
-          <div>
-            Don't have an account? <Link to="/register">Register</Link> now.
-          </div>
-        </div>
-      </div> */}
-    </>
+      </Segment>
+    </Layout>
   )
 }
