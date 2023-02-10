@@ -6,7 +6,7 @@ import {
   signInWithGoogle,
   logInWithEmailAndPassword
 } from '../../firebase'
-import { Button, Form, Message, Segment } from 'semantic-ui-react'
+import { Form, Message, Segment } from 'semantic-ui-react'
 import Layout from './Layout'
 
 const validate = (email, password) => {
@@ -17,7 +17,7 @@ const validate = (email, password) => {
 }
 
 export default function Login() {
-  const [user, loading, error] = useAuthState(auth)
+  const [user, loading] = useAuthState(auth)
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -58,7 +58,7 @@ export default function Login() {
       return
     }
     if (user) navigate('/dashboard')
-  }, [user, loading])
+  }, [user, loading, navigate])
 
   return (
     <Layout header="Dashboard Log in">

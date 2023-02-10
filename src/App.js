@@ -1,10 +1,9 @@
-// import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 import Reset from './components/Auth/Reset'
 import Dashboard from './components/Dashboard'
-import 'semantic-ui-css/semantic.min.css'
+import 'semantic-ui-less/semantic.less'
 
 function App() {
   return (

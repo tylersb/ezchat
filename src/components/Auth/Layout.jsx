@@ -6,7 +6,7 @@ export default function Layout({ children, header }) {
     <Grid textAlign="center" verticalAlign="middle" className="auth">
       <Grid.Column style={{ maxWidth: 450 }}>
           <Image src={logo} size="small" centered />
-          <Header as="h2" color="black" textAlign="center">
+          <Header as="h2" textAlign="center">
             {header}
           </Header>
             {children}
