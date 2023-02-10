@@ -18,10 +18,12 @@ import {
   where,
   addDoc
 } from 'firebase/firestore'
+import { getDatabase, ref, set } from 'firebase/database'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBxso0Zrd9u1TpRsyONP4bWMFVFzz_sq1s',
   authDomain: 'ez-chat-b744b.firebaseapp.com',
+  databaseURL: "https://ez-chat-b744b-default-rtdb.firebaseio.com",
   projectId: 'ez-chat-b744b',
   storageBucket: 'ez-chat-b744b.appspot.com',
   messagingSenderId: '101182155789',
