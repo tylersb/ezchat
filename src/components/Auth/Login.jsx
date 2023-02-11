@@ -76,6 +76,7 @@ export default function Login() {
             required
             onBlur={handleBlur('email')}
             error={shouldMarkError('email')}
+            autoComplete="username"
           />
           <Form.Input
             fluid
@@ -89,6 +90,7 @@ export default function Login() {
             required
             onBlur={handleBlur('password')}
             error={shouldMarkError('password')}
+            autoComplete="current-password"
           />
           <Form.Button
             color="teal"

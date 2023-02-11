@@ -1,8 +1,6 @@
-import React from 'react'
-import { Menu, Icon } from 'semantic-ui-react'
+import { Menu, Loader } from 'semantic-ui-react'
 import UserPanel from './UserPanel'
 // import Starred from './Starred'
-// import Channels from './Channels'
 // import DirectMessages from './DirectMessages'
 import { useNavigate } from 'react-router-dom'
 import { auth } from '../../firebase'
@@ -12,7 +10,9 @@ export default function SidePanel({
   userData,
   activeGroupId,
   handleGroupClick,
-  groups
+  groups,
+  groupsloading,
+  userDataLoading
 }) {
   const navigate = useNavigate()
 
@@ -20,8 +20,6 @@ export default function SidePanel({
     auth.signOut()
     navigate('/login')
   }
-
-  if (!userData) return null
 
   return (
     <div>
@@ -32,13 +30,13 @@ export default function SidePanel({
         vertical
         style={{ background: '#4c3c4c', fontSize: '1.2rem' }}
       >
-        <UserPanel userData={userData} handleLogout={handleLogout} />
-        {/* <Starred /> */}
+      {userDataLoading ? <Loader active inline="centered" /> : <UserPanel userData={userData} handleLogout={handleLogout} />}
         <Channels 
           userData={userData}
           activeGroupId={activeGroupId}
           handleGroupClick={handleGroupClick}
           groups={groups}
+          groupsloading={groupsloading}
         />
         {/* <DirectMessages /> */}
       </Menu>

@@ -1,21 +1,14 @@
-import { useCollection } from 'react-firebase-hooks/firestore'
 import { db } from '../../firebase'
-import {
-  query,
-  collection,
-  orderBy,
-  addDoc,
-  serverTimestamp,
-  doc
-} from 'firebase/firestore'
-import { Header, Grid, List, Icon } from 'semantic-ui-react'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { Header, Grid, List, Icon, Loader } from 'semantic-ui-react'
 import NewChannelModal from './NewChannelModal'
 
 export default function Channels({
   handleGroupClick,
   activeGroupId,
   userData,
-  groups
+  groups,
+  groupsloading
 }) {
   const addNewChannel = async (channel) => {
     try {
@@ -32,7 +25,7 @@ export default function Channels({
     }
   }
 
-  const displayChannels = groups?.docs?.map((channel, idx) => {
+  const displayChannels = groups?.docs?.map((channel) => {
     if (
       channel._document.data.value.mapValue.fields.type.stringValue !==
       'channel'
@@ -78,9 +71,13 @@ export default function Channels({
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <List animated divided verticalAlign="middle">
-        {displayChannels}
-      </List>
+      {groupsloading ? (
+        <Loader active inline="centered" />
+      ) : (
+        <List animated divided verticalAlign="middle">
+          {displayChannels}
+        </List>
+      )}
     </>
   )
 }
