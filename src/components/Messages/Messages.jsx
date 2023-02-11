@@ -8,12 +8,13 @@ import {
 import { db } from '../../firebase'
 import { query, collection, orderBy, where } from 'firebase/firestore'
 import Message from './Message'
+import { useRef, useEffect } from 'react'
 
 export default function Messages({ userData, activeGroupId, groups }) {
   const [messages, messagesLoading, error] = useCollection(
     query(
       collection(db, 'messages'),
-      orderBy('createdAt'),
+      orderBy('createdAt', 'desc'),
       where('groupId', '==', activeGroupId)
     ),
     { idField: 'id' }
@@ -26,8 +27,9 @@ export default function Messages({ userData, activeGroupId, groups }) {
     ) || [null]
 
   const [users, usersLoading, usersError] = useCollectionData(
-    query(collection(db, 'users'), 
-    // where('uid', 'in', userList)
+    query(
+      collection(db, 'users')
+      // where('uid', 'in', userList)
     ),
     { idField: 'uid' }
   )
@@ -98,7 +100,6 @@ export default function Messages({ userData, activeGroupId, groups }) {
           style={{
             height: '80vh'
           }}
-          
         >
           <Segment
             style={{
@@ -106,7 +107,13 @@ export default function Messages({ userData, activeGroupId, groups }) {
               height: '100%'
             }}
           >
-            <Comment.Group className="messages">
+            <Comment.Group
+              className="messages"
+              style={{
+                display: 'flex',
+                flexDirection: 'column-reverse'
+              }}
+            >
               {displayMessages}
             </Comment.Group>
           </Segment>
