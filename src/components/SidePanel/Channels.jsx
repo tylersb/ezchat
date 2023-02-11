@@ -1,28 +1,30 @@
-import { useState } from 'react'
-import { useCollectionData } from 'react-firebase-hooks/firestore'
+import { useCollection } from 'react-firebase-hooks/firestore'
 import { db } from '../../firebase'
 import {
   query,
   collection,
   orderBy,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  doc
 } from 'firebase/firestore'
 import { Header, Grid, List, Icon } from 'semantic-ui-react'
 import NewChannelModal from './NewChannelModal'
 
-export default function Channels() {
-  const [channels, loading, error] = useCollectionData(
-    query(collection(db, 'channels'), orderBy('createdAt')),
-    { idField: 'id' }
-  )
-  const [activeChannelId, setActiveChannelId] = useState('')
-
+export default function Channels({
+  handleGroupClick,
+  activeGroupId,
+  userData,
+  groups
+}) {
   const addNewChannel = async (channel) => {
     try {
-      await addDoc(collection(db, 'channels'), {
+      await addDoc(collection(db, 'groups'), {
         ...channel,
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
+        members: [userData?.uid],
+        createdByUid: userData?.uid,
+        type: 'channel'
       })
     } catch (err) {
       console.error(err)
@@ -30,26 +32,27 @@ export default function Channels() {
     }
   }
 
-  const handleChannelClick = (channel) => {
-    setActiveChannelId(channel.id)
-  }
-
-  const displayChannels = channels?.map((channel) => {
+  const displayChannels = groups?.docs?.map((channel, idx) => {
+    if (
+      channel._document.data.value.mapValue.fields.type.stringValue !==
+      'channel'
+    )
+      return null
     return (
       <List.Item
-        key={channel.id}
-        onClick={() => handleChannelClick(channel)}
+        onClick={() => handleGroupClick(channel)}
         style={{ cursor: 'pointer', marginLeft: '2em' }}
-        active={channel.id === activeChannelId}
+        active={channel.id === activeGroupId}
+        key={channel.id}
       >
-        # {channel.name}
+        # {channel._document.data.value.mapValue.fields.name.stringValue}
       </List.Item>
     )
   })
 
   return (
     <>
-      <Grid justifyContent="center" verticalAlign="middle">
+      <Grid verticalAlign="middle">
         <Grid.Row
           style={{ padding: '0', height: '1.5em', marginBottom: '.4em' }}
         >

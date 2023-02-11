@@ -12,7 +12,12 @@ export default function NewChannelModal({ addNewChannel }) {
   return (
     <Modal
       basic
-      onClose={() => setOpen(false)}
+      onClose={
+        () => {
+          setChannel({ name: '', details: '' })
+          setOpen(false)
+        }
+      }
       onOpen={() => setOpen(true)}
       open={open}
       size="small"
@@ -54,7 +59,6 @@ export default function NewChannelModal({ addNewChannel }) {
           () => {
             addNewChannel(channel)
             setOpen(false)
-            setChannel({ name: '', details: '' })
           }
         }>
           <Icon name="checkmark" /> Add

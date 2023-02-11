@@ -8,14 +8,20 @@ import { useNavigate } from 'react-router-dom'
 import { auth } from '../../firebase'
 import Channels from './Channels'
 
-export default function SidePanel({ userData }) {
-
+export default function SidePanel({
+  userData,
+  activeGroupId,
+  handleGroupClick,
+  groups
+}) {
   const navigate = useNavigate()
 
   const handleLogout = () => {
     auth.signOut()
     navigate('/login')
   }
+
+  if (!userData) return null
 
   return (
     <div>
@@ -28,7 +34,12 @@ export default function SidePanel({ userData }) {
       >
         <UserPanel userData={userData} handleLogout={handleLogout} />
         {/* <Starred /> */}
-        <Channels />
+        <Channels 
+          userData={userData}
+          activeGroupId={activeGroupId}
+          handleGroupClick={handleGroupClick}
+          groups={groups}
+        />
         {/* <DirectMessages /> */}
       </Menu>
     </div>
