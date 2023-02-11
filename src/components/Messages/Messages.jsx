@@ -96,6 +96,7 @@ export default function Messages({ userData, activeGroupId, groups }) {
           style={{
             height: '80vh'
           }}
+          
         >
           <Segment
             style={{

@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useNavigate } from 'react-router-dom'
 import { auth, db } from '../firebase'
-import { query, collection, getDocs, where, orderBy } from 'firebase/firestore'
+import { query, collection, getDocs, where } from 'firebase/firestore'
 import SidePanel from './SidePanel/SidePanel'
 import Messages from './Messages/Messages'
 import { Grid, Container, Segment, Loader } from 'semantic-ui-react'
@@ -27,7 +27,7 @@ export default function Dashboard() {
     try {
       const q = query(collection(db, 'users'), where('uid', '==', user?.uid))
       const doc = await getDocs(q)
-      const data = doc.docs[0].data()
+      const data = doc.docs[0].data() || null
       setUserData(data)
     } catch (err) {
       console.error(err)

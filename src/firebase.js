@@ -7,6 +7,7 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInAnonymously,
   sendPasswordResetEmail,
   signOut
 } from 'firebase/auth'
@@ -49,6 +50,27 @@ const getGravatarURL = (email) => {
 
   // Grab the actual image URL
   return `https://www.gravatar.com/avatar/${hash}?d=identicon`
+}
+
+const logInAnonymously = async () => {
+  try {
+    const res = await signInAnonymously(auth)
+    const user = res.user
+    const q = query(collection(db, 'users'), where('uid', '==', user.uid))
+    const docs = await getDocs(q)
+    if (docs.docs.length === 0) {
+      await addDoc(collection(db, 'users'), {
+        uid: user.uid,
+        name: 'Anonymous',
+        authProvider: 'anonymous',
+        email: '',
+        avatar: getGravatarURL(user.uid)
+      })
+    }
+  } catch (err) {
+    console.error(err)
+    alert(err.message)
+  }
 }
 
 const signInWithGoogle = async () => {
@@ -119,5 +141,6 @@ export {
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
   sendPasswordReset,
+  logInAnonymously,
   logout
 }

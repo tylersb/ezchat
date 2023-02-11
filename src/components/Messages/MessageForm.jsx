@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Segment, Input, Button, Form } from 'semantic-ui-react'
-import { addDoc, collection, serverTimestamp, doc } from 'firebase/firestore'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase'
 
 export default function MessageForm({ userData, activeGroupId }) {
@@ -8,6 +8,7 @@ export default function MessageForm({ userData, activeGroupId }) {
   const [loading, setLoading] = useState(false)
 
   const sendMessage = async (e) => {
+    if (!message.trim()) return
     e.preventDefault()
     setLoading(true)
     try {
@@ -30,6 +31,7 @@ export default function MessageForm({ userData, activeGroupId }) {
     <Segment className="message__form">
       <Form
         onSubmit={sendMessage}
+        autoComplete="off"
       >
       <Input
         fluid

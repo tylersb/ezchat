@@ -4,7 +4,8 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import {
   auth,
   signInWithGoogle,
-  logInWithEmailAndPassword
+  logInWithEmailAndPassword,
+  logInAnonymously
 } from '../../firebase'
 import { Form, Message, Segment } from 'semantic-ui-react'
 import Layout from './Layout'
@@ -101,6 +102,9 @@ export default function Login() {
         </Form>
         <Form.Button color="teal" fluid size="huge" onClick={signInWithGoogle}>
           Log in with Google
+        </Form.Button>
+        <Form.Button color="teal" fluid size="huge" onClick={logInAnonymously}>
+          Log in Anonymously
         </Form.Button>
       </Segment>
       <Segment>

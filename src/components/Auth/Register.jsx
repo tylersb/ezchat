@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import {
   auth,
   registerWithEmailAndPassword,
-  signInWithGoogle
+  signInWithGoogle,
+  logInAnonymously
 } from '../../firebase'
 import { useEffect, useState } from 'react'
 import { Form, Message, Segment } from 'semantic-ui-react'
@@ -140,6 +141,9 @@ export default function Register() {
         </Form>
         <Form.Button color="teal" fluid size="huge" onClick={signInWithGoogle}>
           Sign Up through Google
+        </Form.Button>
+        <Form.Button color="teal" fluid size="huge" onClick={logInAnonymously}>
+          Sign In Anonymously
         </Form.Button>
       </Segment>
       <Message size="big">
