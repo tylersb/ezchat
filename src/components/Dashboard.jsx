@@ -34,7 +34,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (loading) return
-    if (!user) return navigate('/login')
+    if (!user) return navigate('/auth')
   }, [user, loading, navigate])
 
   const handleGroupClick = (group) => {
