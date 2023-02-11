@@ -8,13 +8,12 @@ import {
 import { db } from '../../firebase'
 import { query, collection, orderBy, where } from 'firebase/firestore'
 import Message from './Message'
-import { useRef, useEffect } from 'react'
 
 export default function Messages({ userData, activeGroupId, groups }) {
   const [messages, messagesLoading, error] = useCollection(
     query(
       collection(db, 'messages'),
-      orderBy('createdAt', 'desc'),
+      orderBy('createdAt'),
       where('groupId', '==', activeGroupId)
     ),
     { idField: 'id' }
@@ -83,53 +82,61 @@ export default function Messages({ userData, activeGroupId, groups }) {
     )
 
   return (
-    <Grid>
-      <Grid.Column>
-        <Grid.Row
+    <Container
+      style={{ height: '100vh', width: '100vw', padding: 0, margin: 0 }}
+    >
+      <Grid>
+        <Grid.Column
           style={{
-            height: '7vh'
+            height: '100vh',
+            width: '100vw',
           }}
         >
-          <MessagesHeader
-            userData={userData}
-            activeGroupId={activeGroupId}
-            groups={groups}
-          />
-        </Grid.Row>
-        <Grid.Row
-          style={{
-            height: '80vh'
-          }}
-        >
-          <Segment
+          <Grid.Row
             style={{
-              overflow: 'auto',
-              height: '100%'
+              height: '7vh'
             }}
           >
-            <Comment.Group
-              className="messages"
+            <MessagesHeader
+              userData={userData}
+              activeGroupId={activeGroupId}
+              groups={groups}
               style={{
+                height: '7vh'
+              }}
+            />
+          </Grid.Row>
+          <Grid.Row
+            style={{
+              height: '80vh'
+            }}
+          >
+            <Segment
+              style={{
+                overflow: 'auto',
+                height: '100%',
                 display: 'flex',
                 flexDirection: 'column-reverse'
               }}
             >
-              {displayMessages}
-            </Comment.Group>
-          </Segment>
-        </Grid.Row>
-        <Grid.Row
-          style={{
-            height: '15vh'
-          }}
-        >
-          <MessageForm
-            userData={userData}
-            activeGroupId={activeGroupId}
-            groups={groups}
-          />
-        </Grid.Row>
-      </Grid.Column>
-    </Grid>
+              <Comment.Group className="messages">
+                {displayMessages}
+              </Comment.Group>
+            </Segment>
+          </Grid.Row>
+          <Grid.Row
+            style={{
+              height: '5vh'
+            }}
+          >
+            <MessageForm
+              userData={userData}
+              activeGroupId={activeGroupId}
+              groups={groups}
+            />
+          </Grid.Row>
+        </Grid.Column>
+      </Grid>
+    </Container>
   )
 }
