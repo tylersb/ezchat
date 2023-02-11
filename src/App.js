@@ -3,14 +3,21 @@ import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 import Reset from './components/Auth/Reset'
 import Dashboard from './components/Dashboard'
-import 'semantic-ui-less/semantic.less'
+import Auth from './components/Auth/Auth'
+import '@fontsource/roboto/300.css'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
+import CssBaseline from '@mui/material/CssBaseline'
 
 function App() {
   return (
     <>
+      <CssBaseline enableColorScheme />
       <Router>
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset" element={<Reset />} />

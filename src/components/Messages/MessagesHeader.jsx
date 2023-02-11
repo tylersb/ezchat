@@ -1,4 +1,4 @@
-import { Header, Segment, Icon, Grid } from 'semantic-ui-react'
+import { Typography, Box } from '@mui/material'
 
 export default function MessagesHeader({ userData, activeGroupId, groups }) {
   const totalMembers = groups?.docs?.find((group) => group.id === activeGroupId)
@@ -6,51 +6,49 @@ export default function MessagesHeader({ userData, activeGroupId, groups }) {
     ?.length
 
   return (
-    <Segment
-      style={{
-        height: '7vh',
+    <Box
+      sx={{
         display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        width: '100%',
+        height: '10%',
+        backgroundColor: 'white',
+        padding: 1
       }}
     >
-      <Grid
-        style={{
-          marginLeft: '0'
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          padding: 1
         }}
       >
-        <Grid.Row
-          style={{
-            height: '50%',
-            padding: '0',
-            margin: '0'
-          }}
-        >
-          <Header
-            fluid="true"
-            as="h2"
-            floated="left"
-            style={{ marginBottom: 0 }}
-          >
-            <span>
-              {
-                groups?.docs?.find((group) => group.id === activeGroupId)
-                  ?._document?.data?.value?.mapValue?.fields?.name?.stringValue
-              }
-            </span>
-          </Header>
-        </Grid.Row>
-        <Grid.Row
-          style={{
-            height: '50%',
-            padding: '0',
-            margin: '0'
-          }}
-        >
-          <Header.Subheader>
-            {totalMembers} {totalMembers === 1 ? 'user' : 'users'}
-          </Header.Subheader>
-        </Grid.Row>
-      </Grid>
-    </Segment>
+        <Typography variant="h6">
+          {
+            groups?.docs?.find((group) => group.id === activeGroupId)?._document
+              ?.data?.value?.mapValue?.fields?.name?.stringValue
+          }
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          padding: 1
+        }}
+      >
+        <Typography variant="h6">{totalMembers}</Typography>
+      </Box>
+    </Box>
   )
 }

@@ -1,6 +1,14 @@
 import { useState } from 'react'
-import { Button, Icon, Modal, Form } from 'semantic-ui-react'
-
+import {
+  Button,
+  Dialog,
+  TextField,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from '@mui/material'
+import { Add } from '@mui/icons-material'
 
 export default function NewChannelModal({ addNewChannel }) {
   const [open, setOpen] = useState(false)
@@ -9,64 +17,65 @@ export default function NewChannelModal({ addNewChannel }) {
     details: ''
   })
 
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleSubmit = () => {
+    addNewChannel(channel)
+    setChannel({ name: '', details: '' })
+    setOpen(false)
+  }
+
   return (
-    <Modal
-      basic
-      onClose={
-        () => {
-          setChannel({ name: '', details: '' })
-          setOpen(false)
-        }
-      }
-      onOpen={() => setOpen(true)}
-      open={open}
-      size="small"
-      trigger={
-        <Button style={{ background: 'transparent', color: 'white' }}
-          floated="right"
-        >
-          <Icon name="add" 
-            size="tiny"
+    <>
+      <Button
+        onClick={handleClickOpen}
+        style={{ background: 'transparent', color: 'white' }}
+        floated="right"
+      >
+        <Add />
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Create a new channel</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter a name and description for the new channel
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Channel Name"
+            type="text"
+            fullWidth
+            value={channel.name}
+            onChange={(e) => setChannel({ ...channel, name: e.target.value })}
+            autoComplete="off"
           />
-        </Button>
-      }
-    >
-      <Modal.Content>
-        <Form>
-          <Form.Field
-          >
-            <label>Channel Name</label>
-            <input
-              placeholder="Channel Name"
-              value={channel.name}
-              onChange={(e) => setChannel({ ...channel, name: e.target.value })}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Channel Details</label>
-            <input
-              placeholder="Channel Details"
-              value={channel.details}
-              onChange={(e) =>
-                setChannel({ ...channel, details: e.target.value })
-              }
-            />
-          </Form.Field>
-        </Form>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button color="green" inverted onClick={
-          () => {
-            addNewChannel(channel)
-            setOpen(false)
-          }
-        }>
-          <Icon name="checkmark" /> Add
-        </Button>
-        <Button basic color="red" inverted onClick={() => setOpen(false)}>
-          <Icon name="remove" /> Cancel
-        </Button>
-      </Modal.Actions>
-    </Modal>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Channel Description"
+            type="text"
+            fullWidth
+            value={channel.details}
+            onChange={(e) =>
+              setChannel({ ...channel, details: e.target.value })
+            }
+            autoComplete="off"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSubmit}>Create</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }

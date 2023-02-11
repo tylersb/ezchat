@@ -3,6 +3,7 @@ import { initializeApp } from 'firebase/app'
 // import { getAnalytics } from 'firebase/analytics'
 import {
   GoogleAuthProvider,
+  GithubAuthProvider,
   getAuth,
   signInWithPopup,
   signInWithEmailAndPassword,
@@ -38,6 +39,7 @@ const auth = getAuth(app)
 const db = getFirestore(app)
 // const analytics = getAnalytics(app)
 const googleProvider = new GoogleAuthProvider()
+const githubProvider = new GithubAuthProvider()
 
 const getGravatarURL = (email) => {
   // Trim leading and trailing whitespace from
@@ -94,6 +96,27 @@ const signInWithGoogle = async () => {
   }
 }
 
+const signInWithGithub = async () => {
+  try {
+    const res = await signInWithPopup(auth, githubProvider)
+    const user = res.user
+    const q = query(collection(db, 'users'), where('uid', '==', user.uid))
+    const docs = await getDocs(q)
+    if (docs.docs.length === 0) {
+      await addDoc(collection(db, 'users'), {
+        uid: user.uid,
+        name: user.displayName,
+        authProvider: 'github',
+        email: user.email,
+        avatar: getGravatarURL(user.email)
+      })
+    }
+  } catch (err) {
+    console.error(err)
+    alert(err.message)
+  }
+}
+
 const logInWithEmailAndPassword = async (email, password) => {
   try {
     await signInWithEmailAndPassword(auth, email, password)
@@ -138,6 +161,7 @@ export {
   auth,
   db,
   signInWithGoogle,
+  signInWithGithub,
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
   sendPasswordReset,

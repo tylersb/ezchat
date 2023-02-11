@@ -1,6 +1,13 @@
 import moment from 'moment'
-import { Comment } from 'semantic-ui-react'
 import { useRef, useEffect } from 'react'
+import {
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Avatar,
+  Typography
+} from '@mui/material'
 
 export default function Message({ message, userData, users }) {
   const timeStamp = moment(message?.createdAt?.timestampValue).format('h:mm A')
@@ -9,7 +16,6 @@ export default function Message({ message, userData, users }) {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-    console.log(messagesEndRef)
   }
 
   useEffect(() => {
@@ -21,17 +27,28 @@ export default function Message({ message, userData, users }) {
   )
 
   return (
-    <Comment>
-      <Comment.Avatar src={userInfo?.avatar} />
-      <Comment.Content>
-        <Comment.Author as="a">{userInfo?.name}</Comment.Author>
-        <Comment.Metadata>
-          <div
-          ref={messagesEndRef}
-          >{timeStamp}</div>
-        </Comment.Metadata>
-        <Comment.Text>{message?.content.stringValue}</Comment.Text>
-      </Comment.Content>
-    </Comment>
+    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      <ListItem alignItems="flex-start">
+        <ListItemAvatar>
+          <Avatar alt={userInfo?.name} src={userInfo?.avatar} />
+        </ListItemAvatar>
+        <ListItemText
+          primary={userInfo?.name}
+          secondary={
+            <>
+              <Typography
+                sx={{ display: 'inline' }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                {message?.content.stringValue}
+              </Typography>
+              {timeStamp}
+            </>
+          }
+        />
+      </ListItem>
+    </List>
   )
 }

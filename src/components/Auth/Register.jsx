@@ -7,8 +7,7 @@ import {
   logInAnonymously
 } from '../../firebase'
 import { useEffect, useState } from 'react'
-import { Form, Message, Segment } from 'semantic-ui-react'
-import Layout from './Layout'
+import { Paper, Typography, TextField, Button, Grid } from '@mui/material'
 
 const validate = (email, password, name) => {
   return {
@@ -76,79 +75,79 @@ export default function Register() {
   }, [user, loading, navigate])
 
   return (
-    <Layout header="Sign up to get started">
-      <Segment>
-        <Form onSubmit={register}>
-          <Form.Input
-            fluid
-            icon="user"
-            iconPosition="left"
-            placeholder="Name"
-            className="auth-input-field"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            onBlur={handleBlur('name')}
-            required
-            error={shouldMarkError('name')}
-          />
-          <Form.Input
-            fluid
-            icon="user"
-            iconPosition="left"
-            placeholder="E-mail address"
-            className="auth-input-field"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            onBlur={handleBlur('email')}
-            required
-            error={shouldMarkError('email')}
-          />
-          <Form.Input
-            fluid
-            icon="lock"
-            iconPosition="left"
-            placeholder="Password"
-            type="password"
-            className="auth-input-field"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            onBlur={handleBlur('password')}
-            required
-            error={shouldMarkError('password')}
-          />
-          <Form.Input
-            fluid
-            icon="lock"
-            iconPosition="left"
-            placeholder="Confirm Password"
-            type="password"
-            className="auth-input-field"
-            value={form.confirmPassword}
-            onChange={(e) =>
-              setForm({ ...form, confirmPassword: e.target.value })
-            }
-            required
-          />
-          <Form.Button
-            color="teal"
-            fluid
-            size="huge"
-            type="submit"
-            disabled={isDisabled}
-          >
-            Sign up
-          </Form.Button>
-        </Form>
-        <Form.Button color="teal" fluid size="huge" onClick={signInWithGoogle}>
-          Sign Up through Google
-        </Form.Button>
-        <Form.Button color="teal" fluid size="huge" onClick={logInAnonymously}>
-          Sign In Anonymously
-        </Form.Button>
-      </Segment>
-      <Message size="big">
-        <Link to="/login">Already Registered?</Link>
-      </Message>
-    </Layout>
+    <>
+      <Typography variant="h4" component="h1" align="center">
+        Register
+      </Typography>
+      <form onSubmit={register}>
+        <TextField
+          id="name"
+          label="Name"
+          variant="outlined"
+          fullWidth
+          required
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          onBlur={handleBlur('name')}
+          error={shouldMarkError('name')}
+        />
+        <TextField
+          id="email"
+          label="Email Address"
+          variant="outlined"
+          fullWidth
+          required
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          onBlur={handleBlur('email')}
+          error={shouldMarkError('email')}
+        />
+        <TextField
+          id="password"
+          label="Password"
+          variant="outlined"
+          fullWidth
+          required
+          value={form.password}
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          onBlur={handleBlur('password')}
+          error={shouldMarkError('password')}
+        />
+        <TextField
+          id="confirmPassword"
+          label="Confirm Password"
+          variant="outlined"
+          fullWidth
+          required
+          value={form.confirmPassword}
+          onChange={(e) =>
+            setForm({ ...form, confirmPassword: e.target.value })
+          }
+          onBlur={handleBlur('confirmPassword')}
+          error={shouldMarkError('confirmPassword')}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          disabled={isDisabled}
+          sx={{ marginBottom: '8px' }}
+        >
+          Register
+        </Button>
+        <Button
+          variant="contained"
+          onClick={signInWithGoogle}
+          fullWidth
+          sx={{ marginBottom: '8px' }}
+        >
+          Register with Google
+        </Button>
+        <Button variant="contained" onClick={logInAnonymously} fullWidth>
+          Register Anonymously
+        </Button>
+      </form>
+    </>
   )
 }

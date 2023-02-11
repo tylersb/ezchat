@@ -7,8 +7,7 @@ import {
   logInWithEmailAndPassword,
   logInAnonymously
 } from '../../firebase'
-import { Form, Message, Segment } from 'semantic-ui-react'
-import Layout from './Layout'
+import { Typography, TextField, Button, Box } from '@mui/material'
 
 const validate = (email, password) => {
   return {
@@ -62,61 +61,55 @@ export default function Login() {
   }, [user, loading, navigate])
 
   return (
-    <Layout header="Dashboard Log in">
-      <Segment>
-        <Form onSubmit={handleLogin}>
-          <Form.Input
-            fluid
-            icon="user"
-            iconPosition="left"
-            placeholder="E-mail address"
-            className="auth-input-field"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            required
-            onBlur={handleBlur('email')}
-            error={shouldMarkError('email')}
-            autoComplete="username"
-          />
-          <Form.Input
-            fluid
-            icon="lock"
-            iconPosition="left"
-            placeholder="Password"
-            type="password"
-            className="auth-input-field"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            required
-            onBlur={handleBlur('password')}
-            error={shouldMarkError('password')}
-            autoComplete="current-password"
-          />
-          <Form.Button
-            color="teal"
-            fluid
-            size="huge"
-            disabled={isDisabled}
-            type="submit"
-          >
-            Log in
-          </Form.Button>
-        </Form>
-        <Form.Button color="teal" fluid size="huge" onClick={signInWithGoogle}>
-          Log in with Google
-        </Form.Button>
-        <Form.Button color="teal" fluid size="huge" onClick={logInAnonymously}>
-          Log in Anonymously
-        </Form.Button>
-      </Segment>
-      <Segment>
-        <Message size="big">
-          <Link to="/reset">Forgot Password</Link>
-        </Message>
-        <Message size="big">
-          <Link to="/register">Not Registered?</Link>
-        </Message>
-      </Segment>
-    </Layout>
+    <>
+      <Typography variant="h4" component="h1" align="center">
+        Login
+      </Typography>
+      <form onSubmit={handleLogin}>
+        <TextField
+          label="Email"
+          type="email"
+          variant="outlined"
+          fullWidth
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          onBlur={handleBlur('email')}
+          error={shouldMarkError('email')}
+          autoComplete="username"
+          required
+        />
+        <TextField
+          label="Password"
+          type="password"
+          variant="outlined"
+          fullWidth
+          value={form.password}
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          onBlur={handleBlur('password')}
+          error={shouldMarkError('password')}
+          autoComplete="current-password"
+        />
+        <Button
+          variant="contained"
+          type="submit"
+          fullWidth
+          sx={{ marginBottom: '8px' }}
+          disabled={isDisabled}
+        >
+          Login
+        </Button>
+        <Button
+          variant="contained"
+          onClick={signInWithGoogle}
+          fullWidth
+          sx={{ marginBottom: '8px' }}
+        >
+          Login with Google
+        </Button>
+        <Button variant="contained" onClick={logInAnonymously} fullWidth>
+          Login Anonymously
+        </Button>
+      </form>
+    </>
   )
 }

@@ -1,7 +1,8 @@
 import { db } from '../../firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { Header, Grid, List, Icon, Loader } from 'semantic-ui-react'
 import NewChannelModal from './NewChannelModal'
+import { Box, Skeleton, Typography, Button, List } from '@mui/material'
+import Grid from '@mui/material/Unstable_Grid2'
 
 export default function Channels({
   handleGroupClick,
@@ -32,20 +33,50 @@ export default function Channels({
     )
       return null
     return (
-      <List.Item
+      <Button
         onClick={() => handleGroupClick(channel)}
-        style={{ cursor: 'pointer', marginLeft: '2em' }}
+        style={{ cursor: 'pointer', marginLeft: '2em', display: 'block' }}
         active={channel.id === activeGroupId}
         key={channel.id}
       >
         # {channel._document.data.value.mapValue.fields.name.stringValue}
-      </List.Item>
+      </Button>
     )
   })
 
   return (
     <>
-      <Grid verticalAlign="middle">
+      <Grid>
+        <Box sx={{ width: '20%' }}>
+          <Box sx={{ height: '20%' }}>
+            <Typography variant="h6" sx={{ marginLeft: '1em' }}>
+              Channels
+            </Typography>
+          </Box>
+          <Box>
+            <NewChannelModal addNewChannel={addNewChannel} />
+          </Box>
+        </Box>
+        <Box sx={{ width: '80%' }}>
+          <Box sx={{ height: '20%' }}></Box>
+          <Box>
+            {groupsloading ? (
+              <Skeleton variant="rectangular" width={210} height={118} />
+            ) : (
+              <List animated divided verticalAlign="middle">
+                {displayChannels}
+              </List>
+            )}
+          </Box>
+        </Box>
+      </Grid>
+
+      {/* <Header as="h4" style={{ display: 'inline' }}>
+        Channels
+      </Header>
+      <NewChannelModal addNewChannel={addNewChannel} /> */}
+
+      {/* <Grid verticalAlign="middle">
         <Grid.Row
           style={{ padding: '0', height: '1.5em', marginBottom: '.4em' }}
         >
@@ -77,7 +108,7 @@ export default function Channels({
         <List animated divided verticalAlign="middle">
           {displayChannels}
         </List>
-      )}
+      )} */}
     </>
   )
 }

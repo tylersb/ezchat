@@ -5,11 +5,11 @@ import { auth, db } from '../firebase'
 import { query, collection, where } from 'firebase/firestore'
 import SidePanel from './SidePanel/SidePanel'
 import Messages from './Messages/Messages'
-import { Grid, Container, Segment, Loader } from 'semantic-ui-react'
 import {
   useCollection,
   useCollectionData
 } from 'react-firebase-hooks/firestore'
+import { Unstable_Grid2, Box, Skeleton } from '@mui/material'
 
 export default function Dashboard() {
   const [activeGroupId, setActiveGroupId] = useState('')
@@ -37,8 +37,6 @@ export default function Dashboard() {
     if (!user) return navigate('/login')
   }, [user, loading, navigate])
 
-  if (loading) return <Loader active inline="centered" />
-
   const handleGroupClick = (group) => {
     setActiveGroupId(group?.id)
   }
@@ -48,8 +46,10 @@ export default function Dashboard() {
   }
 
   return (
-    <Container
-      style={{
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
         height: '100vh',
         width: '100vw',
         padding: 0,
@@ -57,8 +57,10 @@ export default function Dashboard() {
         overflow: 'hidden'
       }}
     >
-      <Grid columns={2} width={16}>
-        <Grid.Column width={2}>
+      <Box sx={{ width: '20%' }}>
+        {loading ? (
+          <Skeleton variant="rectangular" width={210} height={118} />
+        ) : (
           <SidePanel
             userData={userData?.[0]}
             handleGroupClick={handleGroupClick}
@@ -67,17 +69,15 @@ export default function Dashboard() {
             groupsloading={groupsloading}
             userDataLoading={userDataLoading}
           />
-        </Grid.Column>
-        <Grid.Column width={14}>
-          <Segment>
-            <Messages
-              userData={userData?.[0]}
-              activeGroupId={activeGroupId}
-              groups={groups}
-            />
-          </Segment>
-        </Grid.Column>
-      </Grid>
-    </Container>
+        )}
+      </Box>
+      <Box sx={{ width: '80%' }}>
+        <Messages
+          userData={userData?.[0]}
+          activeGroupId={activeGroupId}
+          groups={groups}
+        />
+      </Box>
+    </Box>
   )
 }
