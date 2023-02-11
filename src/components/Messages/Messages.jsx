@@ -26,7 +26,9 @@ export default function Messages({ userData, activeGroupId, groups }) {
     ) || [null]
 
   const [users, usersLoading, usersError] = useCollectionData(
-    query(collection(db, 'users'), where('uid', 'in', userList)),
+    query(collection(db, 'users'), 
+    // where('uid', 'in', userList)
+    ),
     { idField: 'uid' }
   )
 

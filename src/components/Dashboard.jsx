@@ -14,7 +14,7 @@ export default function Dashboard() {
   const [groups, groupsloading, error] = useCollection(
     query(
       collection(db, 'groups'),
-      where('users', 'array-contains', auth.currentUser?.uid || null),
+      // where('users', 'array-contains', auth.currentUser?.uid || null),
     ),
     { idField: 'id' }
   )
