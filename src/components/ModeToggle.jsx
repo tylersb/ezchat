@@ -18,9 +18,6 @@ export default function ModeToggle() {
         p: 1
       }}
     >
-      <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
-        {theme.palette.mode} mode
-      </Box>
       <IconButton
         sx={{ ml: 1 }}
         onClick={colorMode.toggleColorMode}

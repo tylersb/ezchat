@@ -5,7 +5,8 @@ import {
   Avatar,
   Typography,
   Button,
-  IconButton
+  IconButton,
+  Stack
 } from '@mui/material'
 import { useState } from 'react'
 
@@ -28,13 +29,13 @@ export default function UserPanel({ userData, handleLogout }) {
         alignItems: 'center'
       }}
     >
-      <Tooltip title="User Menu">
+      <Tooltip title="Menu">
         <IconButton
           onClick={handleClick}
           sx={{
             color: 'white',
             padding: 0,
-            margin: 0,
+            margin: 2,
             '&:hover': {
               backgroundColor: 'transparent'
             }
@@ -79,20 +80,12 @@ export default function UserPanel({ userData, handleLogout }) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', p: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Avatar src={userData?.avatar} />
-            <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1 }}>
-              <Typography variant="body1">{userData?.displayName}</Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {userData?.email}
-              </Typography>
-            </Box>
-          </Box>
-          <Button variant="contained" sx={{ mt: 1 }} onClick={handleLogout}>
+        <Stack mb={-1}>
+          <Typography variant="body1">Logged in as {userData?.name}</Typography>
+          <Button sx={{ mt: 1 }} onClick={handleLogout}>
             Logout
           </Button>
-        </Box>
+        </Stack>
       </Menu>
     </Box>
   )

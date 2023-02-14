@@ -68,39 +68,5 @@ export default function Dashboard() {
         groups={groups}
       />
     </Stack>
-
-    // <Box
-    //   sx={{
-    //     display: 'flex',
-    //     flexDirection: 'row',
-    //     height: '100vh',
-    //     width: '100vw',
-    //     padding: 0,
-    //     margin: 0,
-    //     overflow: 'hidden'
-    //   }}
-    // >
-    //   <Box sx={{ width: '20%' }}>
-    //     {loading ? (
-    //       <Skeleton variant="rectangular" width={210} height={118} />
-    //     ) : (
-    //       <SidePanel
-    //         userData={userData?.[0]}
-    //         handleGroupClick={handleGroupClick}
-    //         activeGroupId={activeGroupId}
-    //         groups={groups}
-    //         groupsloading={groupsloading}
-    //         userDataLoading={userDataLoading}
-    //       />
-    //     )}
-    //   </Box>
-    //   <Box sx={{ width: '80%' }}>
-    //     <Messages
-    //       userData={userData?.[0]}
-    //       activeGroupId={activeGroupId}
-    //       groups={groups}
-    //     />
-    //   </Box>
-    // </Box>
   )
 }
