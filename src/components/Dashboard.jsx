@@ -9,10 +9,25 @@ import {
   useCollection,
   useCollectionData
 } from 'react-firebase-hooks/firestore'
-import { Box, Skeleton, Stack, Divider } from '@mui/material'
+import {
+  Box,
+  Skeleton,
+  Divider,
+  AppBar,
+  IconButton,
+  Drawer,
+  Toolbar,
+  Typography
+} from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import MessagesHeader from './Messages/MessagesHeader'
 
 export default function Dashboard() {
+  // State
   const [activeGroupId, setActiveGroupId] = useState('')
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  // Firebase Hooks
   const [groups, groupsloading, error] = useCollection(
     query(
       collection(db, 'groups')
@@ -28,55 +43,126 @@ export default function Dashboard() {
     { idField: 'uid' }
   )
 
+  // Firebase hook to check if user is logged in
   const [user, loading] = useAuthState(auth)
 
+  // React Router hook to navigate to different pages
   const navigate = useNavigate()
 
+  // If user is not logged in, redirect to login page
   useEffect(() => {
     if (loading) return
     if (!user) return navigate('/auth')
   }, [user, loading, navigate])
 
+  // Click handlers
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen)
+  }
   const handleGroupClick = (group) => {
     setActiveGroupId(group?.id)
   }
 
+  // If there are groups, set the active group to the first group
   if (!activeGroupId && groups?.docs?.length > 0) {
     setActiveGroupId(groups?.docs[0].id)
   }
 
-  return (
-    <Box
-    sx={{
-      height: '100vh',
-      overflow: 'hidden'
-    }}
-    >
-      <Stack
-        direction="row"
-        divider={<Divider orientation="vertical" flexItem />}
-      >
-        <Box>
-          {loading ? (
-            <Skeleton variant="rectangular" width={210} height={118} />
-          ) : (
-            <SidePanel
-              userData={userData?.[0]}
-              handleGroupClick={handleGroupClick}
-              activeGroupId={activeGroupId}
-              groups={groups}
-              groupsloading={groupsloading}
-              userDataLoading={userDataLoading}
-            />
-          )}
-        </Box>
+  const drawer = (
+    <Box>
+      {loading ? (
+        <Skeleton variant="rectangular" width={210} height={118} />
+      ) : (
+        <SidePanel
+          userData={userData?.[0]}
+          handleGroupClick={handleGroupClick}
+          activeGroupId={activeGroupId}
+          groups={groups}
+          groupsloading={groupsloading}
+          userDataLoading={userDataLoading}
+        />
+      )}
+    </Box>
+  )
 
+  const drawerWidth = 240
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` }
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <MessagesHeader
+            userData={userData?.[0]}
+            activeGroupId={activeGroupId}
+            groups={groups}
+          />
+        </Toolbar>
+      </AppBar>
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        aria-label="siebar"
+      >
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: drawerWidth
+            }
+          }}
+        >
+          {drawer}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: drawerWidth
+            }
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+      <Box
+        component="main"
+        sx={{
+          p: 0,
+          width: { sm: `calc(100% - ${drawerWidth}px)` }
+        }}
+      >
+        <Toolbar />
         <Messages
           userData={userData?.[0]}
           activeGroupId={activeGroupId}
           groups={groups}
         />
-      </Stack>
+      </Box>
     </Box>
   )
 }

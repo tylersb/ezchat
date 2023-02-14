@@ -1,5 +1,4 @@
 import MessageForm from './MessageForm'
-import MessagesHeader from './MessagesHeader'
 import {
   useCollection,
   useCollectionData
@@ -7,7 +6,8 @@ import {
 import { db } from '../../firebase'
 import { query, collection, orderBy, where } from 'firebase/firestore'
 import Message from './Message'
-import { Stack, Box } from '@mui/material'
+import { Unstable_Grid2 as Grid, List } from '@mui/material'
+import { useRef, useEffect } from 'react'
 
 export default function Messages({ userData, activeGroupId, groups }) {
   const [messages, messagesLoading, error] = useCollection(
@@ -33,6 +33,16 @@ export default function Messages({ userData, activeGroupId, groups }) {
     { idField: 'uid' }
   )
 
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
   const displayMessages = messages?.docs?.map((message) => {
     const data = message._document.data.value.mapValue.fields
     return (
@@ -41,28 +51,40 @@ export default function Messages({ userData, activeGroupId, groups }) {
         message={data}
         userData={userData}
         users={users}
+        ref={messagesEndRef}
       />
     )
   })
 
   return (
-    <Box>
-      <Stack direction="column">
-        <MessagesHeader
-          userData={userData}
-          activeGroupId={activeGroupId}
-          groups={groups}
-        />
-        <Box flex={1} overflow="auto"
+    <Grid container>
+      <Grid xs={12}>
+        <List
+          sx={{
+            overflow: 'auto',
+            bgcolor: 'background.paper',
+            height: '84vh'
+          }}
         >
           {displayMessages}
-        </Box>
+        </List>
+      </Grid>
+      <Grid
+        xs={12}
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          width: '100%',
+          height: '94px',
+          bgcolor: 'background.paper'
+        }}
+      >
         <MessageForm
           userData={userData}
           activeGroupId={activeGroupId}
           groups={groups}
         />
-      </Stack>
-    </Box>
+      </Grid>
+    </Grid>
   )
 }
