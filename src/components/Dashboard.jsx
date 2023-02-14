@@ -46,27 +46,37 @@ export default function Dashboard() {
   }
 
   return (
-    <Stack direction="row" divider={<Divider orientation="vertical" flexItem />}  >
-      <Box>
-        {loading ? (
-          <Skeleton variant="rectangular" width={210} height={118} />
-        ) : (
-          <SidePanel
-            userData={userData?.[0]}
-            handleGroupClick={handleGroupClick}
-            activeGroupId={activeGroupId}
-            groups={groups}
-            groupsloading={groupsloading}
-            userDataLoading={userDataLoading}
-          />
-        )}
-      </Box>
+    <Box
+    sx={{
+      height: '100vh',
+      overflow: 'hidden'
+    }}
+    >
+      <Stack
+        direction="row"
+        divider={<Divider orientation="vertical" flexItem />}
+      >
+        <Box>
+          {loading ? (
+            <Skeleton variant="rectangular" width={210} height={118} />
+          ) : (
+            <SidePanel
+              userData={userData?.[0]}
+              handleGroupClick={handleGroupClick}
+              activeGroupId={activeGroupId}
+              groups={groups}
+              groupsloading={groupsloading}
+              userDataLoading={userDataLoading}
+            />
+          )}
+        </Box>
 
-      <Messages
-        userData={userData?.[0]}
-        activeGroupId={activeGroupId}
-        groups={groups}
-      />
-    </Stack>
+        <Messages
+          userData={userData?.[0]}
+          activeGroupId={activeGroupId}
+          groups={groups}
+        />
+      </Stack>
+    </Box>
   )
 }
