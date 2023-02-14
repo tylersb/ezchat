@@ -9,7 +9,7 @@ import {
   useCollection,
   useCollectionData
 } from 'react-firebase-hooks/firestore'
-import { Unstable_Grid2, Box, Skeleton } from '@mui/material'
+import { Box, Skeleton, Stack, Divider } from '@mui/material'
 
 export default function Dashboard() {
   const [activeGroupId, setActiveGroupId] = useState('')
@@ -46,18 +46,8 @@ export default function Dashboard() {
   }
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        height: '100vh',
-        width: '100vw',
-        padding: 0,
-        margin: 0,
-        overflow: 'hidden'
-      }}
-    >
-      <Box sx={{ width: '20%' }}>
+    <Stack direction="row" divider={<Divider orientation="vertical" flexItem />}  >
+      <Box>
         {loading ? (
           <Skeleton variant="rectangular" width={210} height={118} />
         ) : (
@@ -71,13 +61,46 @@ export default function Dashboard() {
           />
         )}
       </Box>
-      <Box sx={{ width: '80%' }}>
-        <Messages
-          userData={userData?.[0]}
-          activeGroupId={activeGroupId}
-          groups={groups}
-        />
-      </Box>
-    </Box>
+
+      <Messages
+        userData={userData?.[0]}
+        activeGroupId={activeGroupId}
+        groups={groups}
+      />
+    </Stack>
+
+    // <Box
+    //   sx={{
+    //     display: 'flex',
+    //     flexDirection: 'row',
+    //     height: '100vh',
+    //     width: '100vw',
+    //     padding: 0,
+    //     margin: 0,
+    //     overflow: 'hidden'
+    //   }}
+    // >
+    //   <Box sx={{ width: '20%' }}>
+    //     {loading ? (
+    //       <Skeleton variant="rectangular" width={210} height={118} />
+    //     ) : (
+    //       <SidePanel
+    //         userData={userData?.[0]}
+    //         handleGroupClick={handleGroupClick}
+    //         activeGroupId={activeGroupId}
+    //         groups={groups}
+    //         groupsloading={groupsloading}
+    //         userDataLoading={userDataLoading}
+    //       />
+    //     )}
+    //   </Box>
+    //   <Box sx={{ width: '80%' }}>
+    //     <Messages
+    //       userData={userData?.[0]}
+    //       activeGroupId={activeGroupId}
+    //       groups={groups}
+    //     />
+    //   </Box>
+    // </Box>
   )
 }
