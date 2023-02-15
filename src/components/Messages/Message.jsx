@@ -9,7 +9,7 @@ import {
 import { forwardRef } from 'react'
 
 export default forwardRef(function Message({ message, userData, users }, ref) {
-  const timeStamp = moment(message?.createdAt?.timestampValue).format('h:mm A')
+  const timeStamp = moment(message?.createdAt?.timestampValue).format('llll')
 
   const userInfo = users?.find(
     (user) => user?.uid === message?.uid?.stringValue
@@ -21,8 +21,7 @@ export default forwardRef(function Message({ message, userData, users }, ref) {
         <Avatar alt={userInfo?.name} src={userInfo?.avatar} />
       </ListItemAvatar>
       <ListItemText
-        primary={userInfo?.name}
-        secondary={
+        primary={
           <>
             <Typography
               sx={{ display: 'inline' }}
@@ -30,10 +29,28 @@ export default forwardRef(function Message({ message, userData, users }, ref) {
               variant="body2"
               color="text.primary"
             >
-              {message?.content.stringValue}
+              {userInfo?.name}
             </Typography>
-            {timeStamp}
+            <Typography
+              sx={{ display: 'inline',
+                marginLeft: '5px', }}
+              component="span"
+              variant="caption"
+              color="text.secondary"
+            >
+              {timeStamp}
+            </Typography>
           </>
+        }
+        secondary={
+          <Typography
+            sx={{ display: 'inline' }}
+            component="span"
+            variant="body2"
+            color="text.primary"
+          >
+            {message?.content.stringValue}
+          </Typography>
         }
         ref={ref}
       />
