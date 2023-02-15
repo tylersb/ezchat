@@ -7,6 +7,8 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import UploadSharpIcon from '@mui/icons-material/UploadSharp'
 import SendSharpIcon from '@mui/icons-material/SendSharp'
 import { v4 as uuidv4 } from 'uuid'
+import { CircularProgress } from '@mui/material'
+import { enqueueSnackbar } from 'notistack'
 
 export default function MessageForm({ userData, activeGroupId }) {
   // State
@@ -28,7 +30,8 @@ export default function MessageForm({ userData, activeGroupId }) {
   const handleUpload = async (e) => {
     try {
       e.preventDefault()
-      if (!file) return
+      if (!file) return enqueueSnackbar('Please select a file to upload')
+
       const storageRef = ref(storage, `images/${uuidv4()}-${file.name}`)
       const uploadTask = uploadBytesResumable(storageRef, file)
       uploadTask.on(

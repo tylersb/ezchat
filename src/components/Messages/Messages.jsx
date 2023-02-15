@@ -74,7 +74,7 @@ export default function Messages({ userData, activeGroupId, groups }) {
         sx={{
           position: 'fixed',
           bottom: 0,
-          height: '94px',
+          height: '90px',
           bgcolor: 'background.paper'
         }}
       >

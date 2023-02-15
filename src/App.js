@@ -10,6 +10,7 @@ import { ThemeProvider, createTheme } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useState, useEffect, useMemo } from 'react'
 import { ColorModeContext } from './components/contexts/ColorModeContext'
+import { SnackbarProvider } from 'notistack'
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
@@ -46,13 +47,21 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline enableColorScheme />
-        <Router>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/*" element={<Dashboard />} />
-          </Routes>
-        </Router>
+        <SnackbarProvider
+          maxSnack={1}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center'
+          }}
+        >
+          <Router>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/*" element={<Dashboard />} />
+            </Routes>
+          </Router>
+        </SnackbarProvider>
       </ThemeProvider>
     </ColorModeContext.Provider>
   )
