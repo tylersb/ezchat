@@ -4,8 +4,12 @@ import {
   Dialog,
   TextField,
   DialogContent,
-  DialogTitle
+  DialogTitle,
+  IconButton,
+  InputAdornment
 } from '@mui/material'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 const validate = (email, password, name) => {
   return {
@@ -16,6 +20,7 @@ const validate = (email, password, name) => {
 }
 
 export default function EmailAuth({ children, handleSubmit, type }) {
+  // States
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState({
     name: '',
@@ -28,14 +33,48 @@ export default function EmailAuth({ children, handleSubmit, type }) {
       password: false
     }
   })
+  const [showPassword, setShowPassword] = useState(false)
 
+  // Handle functions
   const handleBlur = (field) => (evt) => {
     setForm({
       ...form,
       touched: { ...form.touched, [field]: true }
     })
   }
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword)
+  }
 
+  const handleMouseDownPassword = (e) => {
+    e.preventDefault()
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+    setForm({
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      touched: {
+        name: false,
+        email: false,
+        password: false
+      }
+    })
+  }
+
+  const handleConfirm = (e) => {
+    e.preventDefault()
+    type === 'register' ? register() : login()
+  }
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  // Validation
   const errors =
     type === 'register'
       ? validate(form.email, form.password, form.name)
@@ -50,6 +89,7 @@ export default function EmailAuth({ children, handleSubmit, type }) {
     return hasError ? shouldShow : false
   }
 
+  // Submit functions
   const register = () => {
     if (form.password !== form.confirmPassword) {
       alert('Passwords do not match')
@@ -74,30 +114,6 @@ export default function EmailAuth({ children, handleSubmit, type }) {
     }
     const { email, password } = form
     handleSubmit(email, password)
-  }
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-    setForm({
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      touched: {
-        name: false,
-        email: false,
-        password: false
-      }
-    })
-  }
-
-  const handleConfirm = (e) => {
-    e.preventDefault()
-    type === 'register' ? register() : login()
   }
 
   return (
@@ -142,13 +158,26 @@ export default function EmailAuth({ children, handleSubmit, type }) {
               variant="outlined"
               fullWidth
               required
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               onBlur={handleBlur('password')}
               error={shouldMarkError('password')}
               sx={{ mb: 1, mt: 1 }}
               autoComplete="current-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword} 
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
             />
             {type === 'register' && (
               <TextField
@@ -157,7 +186,7 @@ export default function EmailAuth({ children, handleSubmit, type }) {
                 variant="outlined"
                 fullWidth
                 required
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={form.confirmPassword}
                 onChange={(e) =>
                   setForm({ ...form, confirmPassword: e.target.value })
@@ -166,6 +195,19 @@ export default function EmailAuth({ children, handleSubmit, type }) {
                 error={shouldMarkError('confirmPassword')}
                 sx={{ mb: 1, mt: 1 }}
                 autoComplete="current-password"
+                InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword} 
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
               />
             )}
             <Button

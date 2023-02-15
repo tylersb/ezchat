@@ -88,7 +88,9 @@ export default function Dashboard() {
   const drawerWidth = 240
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex',
+      height: '100vh',
+    }}>
       <AppBar
         position="fixed"
         sx={{

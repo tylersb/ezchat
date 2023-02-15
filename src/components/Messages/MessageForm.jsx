@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase'
-import { Box, TextField, Button } from '@mui/material'
+import { Box, TextField, IconButton } from '@mui/material'
 import { storage } from '../../firebase'
 import { ref, uploadBytes } from 'firebase/storage'
+import UploadSharpIcon from '@mui/icons-material/UploadSharp'
+import SendSharpIcon from '@mui/icons-material/SendSharp'
 
 export default function MessageForm({ userData, activeGroupId }) {
   const [message, setMessage] = useState('')
@@ -20,8 +22,7 @@ export default function MessageForm({ userData, activeGroupId }) {
     try {
       const storageRef = ref(storage, file.name)
       await uploadBytes(storageRef, file)
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err)
     }
   }
@@ -57,15 +58,26 @@ export default function MessageForm({ userData, activeGroupId }) {
           type="text"
           className={loading ? 'loading' : ''}
           fullWidth
+          display="inline"
         />
-        <Button
+        <IconButton
           color="primary"
           variant="contained"
           type="submit"
-          disabled={loading}
+          disabled={loading || message.length < 1}
+          display="inline"
+        >
+          <SendSharpIcon />
+        </IconButton>
+        {/* <Button
+          color="primary"
+          variant="contained"
+          type="submit"
+          disabled={loading || message.length < 1}
+          display="inline"
         >
           Send
-        </Button>
+        </Button> */}
       </form>
     </Box>
   )
