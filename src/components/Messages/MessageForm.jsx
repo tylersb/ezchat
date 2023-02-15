@@ -2,10 +2,29 @@ import { useState } from 'react'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase'
 import { Box, TextField, Button } from '@mui/material'
+import { storage } from '../../firebase'
+import { ref, uploadBytes } from 'firebase/storage'
 
 export default function MessageForm({ userData, activeGroupId }) {
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const [file, setFile] = useState(null)
+
+  const handleFileChange = (e) => {
+    if (e.target.files[0]) {
+      setFile(e.target.files[0])
+    }
+  }
+
+  const handleUpload = async () => {
+    try {
+      const storageRef = ref(storage, file.name)
+      await uploadBytes(storageRef, file)
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }
 
   const sendMessage = async (e) => {
     if (!message.trim()) return
@@ -51,44 +70,3 @@ export default function MessageForm({ userData, activeGroupId }) {
     </Box>
   )
 }
-// <Segment className="message__form">
-//   <Form
-//     onSubmit={sendMessage}
-//     autoComplete="off"
-//   >
-//   <Input
-//     fluid
-//     name="message"
-//     onChange={(e) => setMessage(e.target.value)}
-//     value={message}
-//     style={{ marginBottom: '0.7em' }}
-//     label={<Button icon={'add'} />}
-//     labelPosition="left"
-//     placeholder="Write your message"
-//     className={loading ? 'loading' : ''}
-//     onKeyPress={(e) => {
-//       if (e.key === 'Enter') {
-//         sendMessage(e)
-//       }
-//     }}
-//   />
-//   <Button.Group icon widths="2">
-//     <Button
-//       color="orange"
-//       content="Add Reply"
-//       labelPosition="left"
-//       icon="edit"
-//       disabled={loading}
-//       type="submit"
-//     />
-
-//     <Button
-//       color="teal"
-//       content="Upload Media"
-//       labelPosition="right"
-//       icon="cloud upload"
-//       disabled
-//     />
-//   </Button.Group>
-//   </Form>
-// </Segment>

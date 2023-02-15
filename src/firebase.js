@@ -20,6 +20,7 @@ import {
   where,
   addDoc
 } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
 import md5 from 'md5'
 
 const firebaseConfig = {
@@ -37,6 +38,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 const db = getFirestore(app)
+const storage = getStorage(app)
 // const analytics = getAnalytics(app)
 const googleProvider = new GoogleAuthProvider()
 const githubProvider = new GithubAuthProvider()
@@ -160,6 +162,7 @@ const logout = () => {
 export {
   auth,
   db,
+  storage,
   signInWithGoogle,
   signInWithGithub,
   logInWithEmailAndPassword,
