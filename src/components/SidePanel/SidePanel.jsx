@@ -38,6 +38,7 @@ export default function SidePanel({
         handleGroupClick={handleGroupClick}
         groups={groups}
         groupsloading={groupsloading}
+        userData={userData}
       />
     </Stack>
   )

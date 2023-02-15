@@ -13,10 +13,10 @@ export default function Channels({
 }) {
   const addNewChannel = async (channel) => {
     try {
-      await addDoc(collection(db, 'groups'), {
+        await addDoc(collection(db, 'groups'), {
         ...channel,
         createdAt: serverTimestamp(),
-        members: [userData?.uid],
+        users: [userData?.uid],
         createdByUid: userData?.uid,
         type: 'channel'
       })
