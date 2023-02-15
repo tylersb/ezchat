@@ -21,6 +21,7 @@ import {
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import MessagesHeader from './Messages/MessagesHeader'
+import { max } from 'moment'
 
 export default function Dashboard() {
   // State
@@ -88,9 +89,7 @@ export default function Dashboard() {
   const drawerWidth = 240
 
   return (
-    <Box sx={{ display: 'flex',
-      height: '100vh',
-    }}>
+    <Box sx={{ display: 'flex', height: '100vh', width: '100vw' }}>
       <AppBar
         position="fixed"
         sx={{
@@ -155,7 +154,8 @@ export default function Dashboard() {
         component="main"
         sx={{
           p: 0,
-          width: { sm: `calc(100% - ${drawerWidth}px)` }
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          maxWidth: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
         <Toolbar />
