@@ -1,4 +1,5 @@
 import { Typography, Box } from '@mui/material'
+import { Skeleton } from '@mui/material'
 
 export default function MessagesHeader({
   userData,
@@ -13,13 +14,23 @@ export default function MessagesHeader({
 
   return (
     <Box>
-      <Typography variant="h6">
-        {groupData?.type === 'channel'
-          ? groupData.name
-          : 'Chat with ' +
-            userEmail(groupData?.users?.find((user) => user !== userData?.uid))}
-      </Typography>
-      <Typography variant="subtitle2">{totalMembers} Users</Typography>
+      {!groups ? (
+        <Skeleton variant="rectangular" 
+          width={210} height={'100%'}
+        />
+      ) : (
+        <>
+          <Typography variant="h6">
+            {groupData?.type === 'channel'
+              ? groupData.name
+              : 'Chat with ' +
+                userEmail(
+                  groupData?.users?.find((user) => user !== userData?.uid)
+                )}
+          </Typography>
+          <Typography variant="subtitle2">{totalMembers} Users</Typography>
+        </>
+      )}
     </Box>
   )
 }
