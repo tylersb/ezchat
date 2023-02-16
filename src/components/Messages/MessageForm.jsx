@@ -1,24 +1,23 @@
 import { useState, useRef } from 'react'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase'
-import { TextField, IconButton, InputAdornment } from '@mui/material'
+import { TextField, IconButton, InputAdornment, Stack } from '@mui/material'
 import { storage } from '../../firebase'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import UploadSharpIcon from '@mui/icons-material/UploadSharp'
 import SendSharpIcon from '@mui/icons-material/SendSharp'
 import { v4 as uuidv4 } from 'uuid'
-import { CircularProgress } from '@mui/material'
-import { enqueueSnackbar } from 'notistack'
+import { toast } from 'react-toastify'
 
 export default function MessageForm({ userData, activeGroupId }) {
   // State
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [file, setFile] = useState(null)
-  const [progress, setProgress] = useState(0)
 
   // Refs
-  const fileInputRef = useRef()
+  const fileInputRef = useRef(null)
+  const toastId = useRef(null)
 
   // Handle clicks/actions
   const handleFileChange = (e) => {
@@ -30,16 +29,32 @@ export default function MessageForm({ userData, activeGroupId }) {
   const handleUpload = async (e) => {
     try {
       e.preventDefault()
-      if (!file) return enqueueSnackbar('Please select a file to upload')
-
+      if (!file)
+        return toast.error('Please select a file to upload', {
+          position: 'top-center'
+        })
       const storageRef = ref(storage, `images/${uuidv4()}-${file.name}`)
       const uploadTask = uploadBytesResumable(storageRef, file)
       uploadTask.on(
         'state_changed',
         (snapshot) => {
-          const progress =
+          const progress = Math.round(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          setProgress(progress)
+          )
+          if (toastId.current) {
+            toast.update(toastId.current, {
+              render: `Uploading... ${progress}%`,
+              type: 'info',
+              isLoading: true,
+              progress
+            })
+          } else {
+            toastId.current = toast.info(`Uploading... ${progress}%`, {
+              position: 'top-center',
+              autoClose: false,
+              progress
+            })
+          }
         },
         (error) => {
           console.error(error)
@@ -54,6 +69,13 @@ export default function MessageForm({ userData, activeGroupId }) {
               uid: userData.uid
             })
           })
+          toast.update(toastId.current, {
+            render: 'Upload complete',
+            type: 'success',
+            isLoading: false,
+            progress: undefined
+          })
+          toastId.current = null
         }
       )
       setFile(null)
@@ -112,17 +134,19 @@ export default function MessageForm({ userData, activeGroupId }) {
           }}
         />
       </form>
-      <form onSubmit={handleUpload}>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          ref={fileInputRef}
-        />
-        <IconButton type="submit" display="inline" sx={{ ml: 1 }}>
-          <UploadSharpIcon />
-        </IconButton>
-      </form>
+      <Stack spacing={2} direction="row">
+        <form onSubmit={handleUpload}>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+          />
+          <IconButton type="submit" display="inline" sx={{ ml: 1 }}>
+            <UploadSharpIcon />
+          </IconButton>
+        </form>
+      </Stack>
     </>
   )
 }

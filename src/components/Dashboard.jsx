@@ -156,6 +156,7 @@ export default function Dashboard() {
           p: 0,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           maxWidth: { sm: `calc(100% - ${drawerWidth}px)` },
+          overflow: 'hidden',
         }}
       >
         <Toolbar />

@@ -16,7 +16,6 @@
     "firebase": "^9.17.1",
     "md5": "^2.3.0",
     "moment": "^2.29.4",
-    "notistack": "^2.0.8",
     "react": "^18.2.0",
     "react-avatar-editor": "^13.0.0",
     "react-color": "^2.19.3",
@@ -24,6 +23,7 @@
     "react-firebase-hooks": "^5.1.1",
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
+    "react-toastify": "^9.1.1",
     "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
