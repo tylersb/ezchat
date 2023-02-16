@@ -27,11 +27,11 @@ export default function Messages({ userData, activeGroupId, groups, users }) {
   }, [messages])
 
   const displayMessages = messages?.docs?.map((message) => {
-    const data = message._document.data.value.mapValue.fields
+    const messageData = message.data()
     return (
       <Message
         key={message.id}
-        message={data}
+        messageData={messageData}
         users={users}
         ref={messagesEndRef}
       />

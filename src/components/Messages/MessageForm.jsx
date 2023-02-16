@@ -202,7 +202,7 @@ export default function MessageForm({ userData, activeGroupId }) {
         >
           <GifPicker
             tenorApiKey={process.env.REACT_APP_TENOR_API_KEY}
-            onGifSelect={handleSendGif}
+            onGifClick={handleSendGif}
           />
         </Menu>
       </Stack>

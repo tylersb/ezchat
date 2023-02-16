@@ -16,7 +16,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-export default forwardRef(function Message({ message, users }, ref) {
+export default forwardRef(function Message({ messageData, users }, ref) {
   const [open, setOpen] = useState(false)
   const [imageLoading, setImageLoading] = useState(true)
 
@@ -28,11 +28,19 @@ export default forwardRef(function Message({ message, users }, ref) {
     setOpen(false)
   }
 
-  const timeStamp = moment(message?.createdAt?.timestampValue).format('llll')
+  const timeStamp = moment(
+    messageData?.createdAt?.toDate(
+      messageData?.createdAt?.seconds * 1000
+    )
+  ).format('llll')
 
   const userInfo = users?.find(
-    (user) => user?.uid === message?.uid?.stringValue
+    (user) => user?.uid === messageData?.uid
   )
+
+  const isImage = messageData?.type === 'image'
+  const isText = messageData?.type === 'text'
+  const isGif = messageData?.type === 'gif'
 
   return (
     <ListItem alignItems="flex-start">
@@ -61,61 +69,112 @@ export default forwardRef(function Message({ message, users }, ref) {
           </>
         }
         secondary={
-          message?.type?.stringValue === 'text' ? (
-            <Typography
-              sx={{ display: 'inline-block', wordBreak: 'break-word' }}
-              component="span"
-              variant="body2"
-              color="text.primary"
-            >
-              {message?.content?.stringValue}
-            </Typography>
-          ) : message?.type?.stringValue === 'image' ? (
-            <Box
-              component="span"
-              sx={{
-                display: 'inline-block',
-                wordBreak: 'break-word',
-                maxWidth: '500px',
-                maxHeight: '500px'
-              }}
-              onClick={handleClickOpen}
-            >
-              <Skeleton
-                variant="rectangular"
+          <Box>
+            {isText && (
+              <Typography
+                sx={{ display: 'inline-block', wordBreak: 'break-word' }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                {messageData?.content}
+              </Typography>
+            )}
+            {isImage && (
+              <Box
+                component="span"
                 sx={{
-                  width: '500px',
-                  height: '500px',
-                  display: imageLoading ? 'block' : 'none'
+                  display: 'inline-block',
+                  wordBreak: 'break-word',
+                  maxWidth: '500px',
+                  maxHeight: '500px'
                 }}
-              />
-              <img
-                loading="lazy"
-                src={message?.content?.stringValue}
-                alt={`uploaded by ${userInfo?.name}`}
-                style={{ maxWidth: '100%', maxHeight: '100%' }}
-                onLoad={() => setImageLoading(false)}
-                display={imageLoading ? 'none' : 'block'}
-              />
-            </Box>
-          ) : null
+                onClick={handleClickOpen}
+              >
+                <Skeleton
+                  variant="rectangular"
+                  sx={{
+                    width: '500px',
+                    height: '500px',
+                    display: imageLoading ? 'block' : 'none'
+                  }}
+                />
+                <img
+                  loading="lazy"
+                  src={messageData?.content}
+                  alt={`uploaded by ${userInfo?.name}`}
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  onLoad={() => setImageLoading(false)}
+                  display={imageLoading ? 'none' : 'block'}
+                />
+              </Box>
+            )}
+            {isGif && (
+              <Box
+                component="span"
+                sx={{
+                  display: 'inline-block',
+                  wordBreak: 'break-word',
+                  maxWidth: messageData?.content?.width,
+                  maxHeight: messageData?.content?.height
+                }}
+                onClick={handleClickOpen}
+              >
+                <Skeleton
+                  variant="rectangular"
+                  sx={{
+                    width: messageData?.content?.width,
+                    height: messageData?.content?.height,
+                    display: imageLoading ? 'block' : 'none'
+                  }}
+                />
+                <img
+                  loading="lazy"
+                  src={messageData?.content?.url}
+                  alt={`uploaded by ${userInfo?.name}`}
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  onLoad={() => setImageLoading(false)}
+                  display={imageLoading ? 'none' : 'block'}
+                />
+              </Box>
+            )}
+          </Box>
         }
         ref={ref}
       />
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-        fullWidth
-        maxWidth="lg"
-      >
-        <img
-          loading="lazy"
-          src={message?.content?.stringValue}
-          alt={`uploaded by ${userInfo?.name}`}
-        />
-      </Dialog>
+
+      {isImage && (
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+          fullWidth
+          maxWidth="lg"
+        >
+          <img
+            loading="lazy"
+            src={messageData?.content}
+            alt={`uploaded by ${userInfo?.name}`}
+          />
+        </Dialog>
+      )}
+      {isGif && (
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+          fullWidth
+          maxWidth="lg"
+        >
+          <img
+            loading="lazy"
+            src={messageData?.content}
+            alt={`uploaded by ${userInfo?.name}`}
+          />
+        </Dialog>
+      )}
     </ListItem>
   )
 })
