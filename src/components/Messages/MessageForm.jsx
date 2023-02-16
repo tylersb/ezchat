@@ -65,6 +65,7 @@ export default function MessageForm({ userData, activeGroupId }) {
             addDoc(collection(db, 'messages'), {
               groupId: activeGroupId,
               content: downloadURL,
+              type: 'image',
               createdAt: serverTimestamp(),
               uid: userData.uid
             })
@@ -93,6 +94,7 @@ export default function MessageForm({ userData, activeGroupId }) {
       await addDoc(collection(db, 'messages'), {
         groupId: activeGroupId,
         content: message,
+        type: 'text',
         createdAt: serverTimestamp(),
         uid: userData.uid
       })
@@ -115,15 +117,17 @@ export default function MessageForm({ userData, activeGroupId }) {
           onChange={(e) => setMessage(e.target.value)}
           type="text"
           className={loading ? 'loading' : ''}
-          display="inline"
-          fullWidth          
+          display="block"
+          fullWidth
+          autoFocus
+          autoComplete="off"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
                 <IconButton
                   type="submit"
                   disabled={loading || !message.trim()}
-                  display="inline"
+                  display="inline-block"
                   sx={{ ml: 1 }}
                 >
                   <SendSharpIcon />
