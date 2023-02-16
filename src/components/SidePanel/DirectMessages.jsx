@@ -9,7 +9,6 @@ export default function DirectMessages({
   handleGroupClick,
   userData,
   groups,
-  groupsloading,
   userEmail
 }) {
   const addNewDirectMessage = async (uid) => {

@@ -6,19 +6,25 @@ import {
   IconButton,
   InputAdornment,
   Stack,
-  Box
+  Box,
+  Menu
 } from '@mui/material'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import UploadSharpIcon from '@mui/icons-material/UploadSharp'
 import SendSharpIcon from '@mui/icons-material/SendSharp'
 import { v4 as uuidv4 } from 'uuid'
 import { toast } from 'react-toastify'
+import GifBoxIcon from '@mui/icons-material/GifBox'
+import GifPicker from 'gif-picker-react'
 
 export default function MessageForm({ userData, activeGroupId }) {
   // State
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [file, setFile] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const open = Boolean(anchorEl)
 
   // Refs
   const fileInputRef = useRef(null)
@@ -85,9 +91,9 @@ export default function MessageForm({ userData, activeGroupId }) {
       )
       setFile(null)
       fileInputRef.current.value = ''
-      return null
     } catch (err) {
       console.error(err)
+      toast.error('Error uploading file', { position: 'top-center' })
     }
   }
 
@@ -111,6 +117,32 @@ export default function MessageForm({ userData, activeGroupId }) {
         position: 'top-center'
       })
       setLoading(false)
+    }
+  }
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleSendGif = async (gif) => {
+    try {
+      await addDoc(collection(db, 'messages'), {
+        groupId: activeGroupId,
+        content: gif,
+        type: 'gif',
+        createdAt: serverTimestamp(),
+        uid: userData.uid
+      })
+      setAnchorEl(null)
+    } catch (err) {
+      console.error(err)
+      toast.error('Error sending gif', {
+        position: 'top-center'
+      })
     }
   }
 
@@ -155,6 +187,24 @@ export default function MessageForm({ userData, activeGroupId }) {
             <UploadSharpIcon />
           </IconButton>
         </form>
+        <IconButton display="inline" sx={{ ml: 1 }} onClick={handleClick}>
+          <GifBoxIcon />
+        </IconButton>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+            sx: { p: 0 }
+          }}
+        >
+          <GifPicker
+            tenorApiKey={process.env.REACT_APP_TENOR_API_KEY}
+            onGifSelect={handleSendGif}
+          />
+        </Menu>
       </Stack>
     </Box>
   )
