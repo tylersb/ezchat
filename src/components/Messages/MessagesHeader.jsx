@@ -1,20 +1,25 @@
 import { Typography, Box } from '@mui/material'
 
-export default function MessagesHeader({ userData, activeGroupId, groups }) {
-  const totalMembers = groups?.docs?.find((group) => group.id === activeGroupId)
-    ?._document?.data?.value?.mapValue?.fields?.users?.arrayValue?.values
-    ?.length || 0
+export default function MessagesHeader({
+  userData,
+  activeGroupId,
+  groups,
+  userEmail
+}) {
+  const groupData = groups?.docs
+    ?.find((group) => group.id === activeGroupId)
+    .data()
+  const totalMembers = groupData?.users?.length || 0
 
   return (
     <Box>
       <Typography variant="h6">
-        {
-          groups?.docs?.find((group) => group.id === activeGroupId)?._document
-            ?.data?.value?.mapValue?.fields?.name?.stringValue
-        }
+        {groupData?.type === 'channel'
+          ? groupData.name
+          : 'Chat with ' +
+            userEmail(groupData?.users?.find((user) => user !== userData?.uid))}
       </Typography>
-      <Typography variant="subtitle2"
-      >{totalMembers} Users</Typography>
+      <Typography variant="subtitle2">{totalMembers} Users</Typography>
     </Box>
   )
 }

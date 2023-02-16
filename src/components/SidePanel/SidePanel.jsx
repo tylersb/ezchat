@@ -13,7 +13,8 @@ export default function SidePanel({
   handleGroupClick,
   groups,
   groupsloading,
-  userDataLoading
+  userDataLoading,
+  userEmail
 }) {
   const navigate = useNavigate()
 
@@ -44,6 +45,7 @@ export default function SidePanel({
         groups={groups}
         groupsloading={groupsloading}
         userData={userData}
+        userEmail={userEmail}
       />
     </Stack>
   )

@@ -9,7 +9,7 @@ import Message from './Message'
 import { Unstable_Grid2 as Grid, List } from '@mui/material'
 import { useRef, useEffect } from 'react'
 
-export default function Messages({ userData, activeGroupId, groups }) {
+export default function Messages({ userData, activeGroupId, groups, users }) {
   const [messages, messagesLoading, error] = useCollection(
     query(
       collection(db, 'messages'),
@@ -24,14 +24,6 @@ export default function Messages({ userData, activeGroupId, groups }) {
     ?._document?.data?.value?.mapValue?.fields?.users?.arrayValue?.values?.map(
       (user) => user?.stringValue
     ) || [null]
-
-  const [users, usersLoading, usersError] = useCollectionData(
-    query(
-      collection(db, 'users')
-      // where('uid', 'in', userList)
-    ),
-    { idField: 'uid' }
-  )
 
   const messagesEndRef = useRef(null)
 

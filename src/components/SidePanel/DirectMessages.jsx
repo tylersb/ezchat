@@ -3,32 +3,37 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import NewDirectMessageModal from './NewDirectMessageModal'
 import { Box, Skeleton, Typography, Button, List } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
+import { toast } from 'react-toastify'
 
 export default function DirectMessages({
   handleGroupClick,
   userData,
   groups,
-  groupsloading
+  groupsloading,
+  userEmail
 }) {
-  const addNewDirectMessage = async (user) => {
+  const addNewDirectMessage = async (uid) => {
     try {
-      await addDoc(collection(db, 'groups'), {
+      const newDirectMessage = await addDoc(collection(db, 'groups'), {
         createdAt: serverTimestamp(),
-        users: [userData?.uid,
-        user.uid],
+        users: [userData?.uid, uid],
         createdByUid: userData?.uid,
         type: 'directMessage'
       })
+      handleGroupClick(newDirectMessage)
     } catch (err) {
       console.error(err)
-      alert('An error occured while creating a new channel')
+      toast.error('An error occured while creating a new direct message', {
+        position: 'top-center'
+      })
     }
   }
 
   const displayDirectMessages = groups?.docs?.map((channel) => {
+    const channelData = channel.data()
     if (
-      channel._document.data.value.mapValue.fields.type.stringValue !==
-      'directMessage'
+      channelData.type !== 'directMessage' ||
+      channelData.users.find((user) => user === userData?.uid) === undefined
     )
       return null
     return (
@@ -37,7 +42,9 @@ export default function DirectMessages({
         style={{ cursor: 'pointer', marginLeft: '2em', display: 'block' }}
         key={channel.id}
       >
-        # {channel._document.data.value.mapValue.fields.name.stringValue}
+        <Typography variant="body1">
+          {userEmail(channelData.users.find((user) => user !== userData?.uid))}
+        </Typography>
       </Button>
     )
   })

@@ -28,8 +28,8 @@ export default function Dashboard() {
   // Firebase Hooks
   const [groups, groupsloading, error] = useCollection(
     query(
-      collection(db, 'groups')
-      // where('users', 'array-contains', auth.currentUser?.uid || null),
+      collection(db, 'groups'),
+      where('users', 'array-contains', auth.currentUser?.uid || null)
     ),
     { idField: 'id' }
   )
@@ -37,6 +37,13 @@ export default function Dashboard() {
     query(
       collection(db, 'users'),
       where('uid', '==', auth.currentUser?.uid || null)
+    ),
+    { idField: 'uid' }
+  )
+  const [users, usersLoading, usersError] = useCollectionData(
+    query(
+      collection(db, 'users')
+      // where('uid', 'in', userList)
     ),
     { idField: 'uid' }
   )
@@ -67,6 +74,11 @@ export default function Dashboard() {
     setActiveGroupId(groups?.docs[0].id)
   }
 
+  const userEmail = (uid) => {
+    const user = users?.find((user) => user.uid === uid)
+    return user?.email
+  }
+
   const drawer = (
     <Box>
       {loading ? (
@@ -79,6 +91,7 @@ export default function Dashboard() {
           groups={groups}
           groupsloading={groupsloading}
           userDataLoading={userDataLoading}
+          userEmail={userEmail}
         />
       )}
     </Box>
@@ -109,6 +122,7 @@ export default function Dashboard() {
             userData={userData?.[0]}
             activeGroupId={activeGroupId}
             groups={groups}
+            userEmail={userEmail}
           />
         </Toolbar>
       </AppBar>
@@ -162,6 +176,7 @@ export default function Dashboard() {
           userData={userData?.[0]}
           activeGroupId={activeGroupId}
           groups={groups}
+          users={users}
         />
       </Box>
     </Box>
