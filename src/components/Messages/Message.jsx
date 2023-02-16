@@ -7,7 +7,8 @@ import {
   Typography,
   Box,
   Dialog,
-  Slide
+  Slide,
+  Skeleton
 } from '@mui/material'
 import { forwardRef, useState } from 'react'
 
@@ -17,6 +18,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 export default forwardRef(function Message({ message, userData, users }, ref) {
   const [open, setOpen] = useState(false)
+  const [imageLoading, setImageLoading] = useState(true)
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -79,11 +81,25 @@ export default forwardRef(function Message({ message, userData, users }, ref) {
               }}
               onClick={handleClickOpen}
             >
-              <img
-                src={message?.content?.stringValue}
-                alt={`uploaded by ${userInfo?.name}`}
-                style={{ maxWidth: '100%', maxHeight: '100%' }}
-              />
+              {imageLoading ? (
+                <Skeleton variant="rectangular">
+                  <img
+                    loading="lazy"
+                    src={message?.content?.stringValue}
+                    alt={`uploaded by ${userInfo?.name}`}
+                    style={{ maxWidth: '100%', maxHeight: '100%' }}
+                    onLoad={() => setImageLoading(false)}
+                  />
+                </Skeleton>
+              ) : (
+                <img
+                  loading="lazy"
+                  src={message?.content?.stringValue}
+                  alt={`uploaded by ${userInfo?.name}`}
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  onLoad={() => setImageLoading(false)}
+                />
+              )}
             </Box>
           ) : null
         }
@@ -98,6 +114,7 @@ export default forwardRef(function Message({ message, userData, users }, ref) {
         maxWidth="lg"
       >
         <img
+          loading="lazy"
           src={message?.content?.stringValue}
           alt={`uploaded by ${userInfo?.name}`}
         />

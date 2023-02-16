@@ -29,19 +29,23 @@ export default function Channels({
   const displayChannels = groups?.docs?.map((channel) => {
     const channelData = channel.data()
     if (channelData.type !== 'channel') return null
-    return (
-      <Button
-        onClick={() => handleGroupClick(channel)}
-        sx={{
-          cursor: 'pointer',
-          marginLeft: '2em',
-          display: 'block'
-        }}
-        key={channel.id}
-        variant="text"
-      >
-        <Typography># {channelData.name}</Typography>
-      </Button>
+    return groupsloading ? (
+      <Skeleton variant="rectangular" width={210} height={118} />
+    ) : (
+      <>
+        <Button
+          onClick={() => handleGroupClick(channel)}
+          sx={{
+            cursor: 'pointer',
+            marginLeft: '2em',
+            display: 'block'
+          }}
+          key={channel.id}
+          variant="text"
+        >
+          <Typography># {channelData.name}</Typography>
+        </Button>
+      </>
     )
   })
 
@@ -68,13 +72,7 @@ export default function Channels({
             <NewChannelModal addNewChannel={addNewChannel} />
           </Box>
         </Box>
-        <Box>
-          {groupsloading ? (
-            <Skeleton variant="rectangular" width="100%" height="100%" />
-          ) : (
-            <>{displayChannels}</>
-          )}
-        </Box>
+        <Box>{displayChannels}</Box>
       </Grid>
     </>
   )

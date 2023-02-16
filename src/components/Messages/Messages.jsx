@@ -1,12 +1,9 @@
 import MessageForm from './MessageForm'
-import {
-  useCollection,
-  useCollectionData
-} from 'react-firebase-hooks/firestore'
+import { useCollection } from 'react-firebase-hooks/firestore'
 import { db } from '../../firebase'
 import { query, collection, orderBy, where } from 'firebase/firestore'
 import Message from './Message'
-import { Unstable_Grid2 as Grid, List } from '@mui/material'
+import { Box, List } from '@mui/material'
 import { useRef, useEffect } from 'react'
 
 export default function Messages({ userData, activeGroupId, groups, users }) {
@@ -49,32 +46,21 @@ export default function Messages({ userData, activeGroupId, groups, users }) {
   })
 
   return (
-    <Grid container>
-      <Grid xs={12}>
-        <List
-          sx={{
-            overflow: 'auto',
-            bgcolor: 'background.paper',
-            height: '84vh'
-          }}
-        >
-          {displayMessages}
-        </List>
-      </Grid>
-      <Grid
-        xs={12}
+    <Box>
+      <List
         sx={{
-          position: 'fixed',
-          bottom: 0,
-          zIndex: 1
+          overflow: 'auto',
+          bgcolor: 'background.paper',
+          height: '84vh'
         }}
       >
-        <MessageForm
-          userData={userData}
-          activeGroupId={activeGroupId}
-          groups={groups}
-        />
-      </Grid>
-    </Grid>
+        {displayMessages}
+      </List>
+      <MessageForm
+        userData={userData}
+        activeGroupId={activeGroupId}
+        groups={groups}
+      />
+    </Box>
   )
 }

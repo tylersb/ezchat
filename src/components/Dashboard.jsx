@@ -9,14 +9,7 @@ import {
   useCollection,
   useCollectionData
 } from 'react-firebase-hooks/firestore'
-import {
-  Box,
-  Skeleton,
-  AppBar,
-  IconButton,
-  Drawer,
-  Toolbar
-} from '@mui/material'
+import { Box, AppBar, IconButton, Drawer, Toolbar } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import MessagesHeader from './Messages/MessagesHeader'
 
@@ -81,26 +74,22 @@ export default function Dashboard() {
 
   const drawer = (
     <Box>
-      {loading ? (
-        <Skeleton variant="rectangular" width={210} height={118} />
-      ) : (
-        <SidePanel
-          userData={userData?.[0]}
-          handleGroupClick={handleGroupClick}
-          activeGroupId={activeGroupId}
-          groups={groups}
-          groupsloading={groupsloading}
-          userDataLoading={userDataLoading}
-          userEmail={userEmail}
-        />
-      )}
+      <SidePanel
+        userData={userData?.[0]}
+        handleGroupClick={handleGroupClick}
+        activeGroupId={activeGroupId}
+        groups={groups}
+        groupsloading={groupsloading}
+        userDataLoading={userDataLoading}
+        userEmail={userEmail}
+      />
     </Box>
   )
 
   const drawerWidth = 240
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', width: '100vw' }}>
+    <Box sx={{ display: 'flex', height: '100vh', width: '100vw', alignItems: 'center' }}>
       <AppBar
         position="fixed"
         sx={{
