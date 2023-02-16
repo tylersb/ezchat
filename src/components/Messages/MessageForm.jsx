@@ -1,7 +1,13 @@
 import { useState, useRef } from 'react'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase'
-import { TextField, IconButton, InputAdornment, Stack } from '@mui/material'
+import {
+  TextField,
+  IconButton,
+  InputAdornment,
+  Stack,
+  Box
+} from '@mui/material'
 import { storage } from '../../firebase'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import UploadSharpIcon from '@mui/icons-material/UploadSharp'
@@ -107,7 +113,7 @@ export default function MessageForm({ userData, activeGroupId }) {
   }
 
   return (
-    <>
+    <Box>
       <form onSubmit={handleMessageSend}>
         <TextField
           label="Message"
@@ -115,7 +121,7 @@ export default function MessageForm({ userData, activeGroupId }) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           type="text"
-          display="block"
+          display="inline"
           fullWidth
           autoFocus
           autoComplete="off"
@@ -125,7 +131,7 @@ export default function MessageForm({ userData, activeGroupId }) {
                 <IconButton
                   type="submit"
                   disabled={loading || !message.trim()}
-                  display="inline-block"
+                  display="inline"
                   sx={{ ml: 1 }}
                 >
                   <SendSharpIcon />
@@ -148,6 +154,6 @@ export default function MessageForm({ userData, activeGroupId }) {
           </IconButton>
         </form>
       </Stack>
-    </>
+    </Box>
   )
 }

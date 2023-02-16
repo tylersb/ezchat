@@ -5,12 +5,7 @@ import { Box, Skeleton, Typography, Button } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
 import { toast } from 'react-toastify'
 
-export default function Channels({
-  handleGroupClick,
-  userData,
-  groups,
-  groupsloading
-}) {
+export default function Channels({ handleGroupClick, userData, groups }) {
   const addNewChannel = async (channel) => {
     try {
       await addDoc(collection(db, 'groups'), {
@@ -29,10 +24,8 @@ export default function Channels({
   const displayChannels = groups?.docs?.map((channel) => {
     const channelData = channel.data()
     if (channelData.type !== 'channel') return null
-    return groupsloading ? (
-      <Skeleton variant="rectangular" width={210} height={118} />
-    ) : (
-      <>
+    return (
+      <Box key={channel.id}>
         <Button
           onClick={() => handleGroupClick(channel)}
           sx={{
@@ -45,7 +38,7 @@ export default function Channels({
         >
           <Typography># {channelData.name}</Typography>
         </Button>
-      </>
+      </Box>
     )
   })
 

@@ -118,7 +118,7 @@ export default function Dashboard() {
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="siebar"
+        aria-label="sidebar"
       >
         <Drawer
           variant="temporary"
@@ -155,8 +155,8 @@ export default function Dashboard() {
         component="main"
         sx={{
           p: 0,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          maxWidth: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { sm: `calc(100% - ${drawerWidth}px)`, xs: '100%' },
+          maxWidth: { sm: `calc(100% - ${drawerWidth}px)`, xs: '100%' },
           overflow: 'hidden'
         }}
       >
