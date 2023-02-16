@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { toast } from 'react-toastify'
 
 const validate = (email, password, name) => {
   return {
@@ -92,15 +93,21 @@ export default function EmailAuth({ children, handleSubmit, type }) {
   // Submit functions
   const register = () => {
     if (form.password !== form.confirmPassword) {
-      alert('Passwords do not match')
+      toast.error('Passwords do not match', {
+        position: 'top-center'
+      })
       return
     }
     if (!form.email || !form.password || !form.name) {
-      alert('Please fill out all fields')
+      toast.error('Please fill out all fields', {
+        position: 'top-center'
+      })
       return
     }
     if (form.password.length < 6) {
-      alert('Password must be at least 6 characters')
+      toast.error('Password must be at least 6 characters', {
+        position: 'top-center'
+      })
       return
     }
     const { name, email, password } = form
@@ -109,7 +116,9 @@ export default function EmailAuth({ children, handleSubmit, type }) {
 
   const login = () => {
     if (!form.email || !form.password) {
-      alert('Please fill out all fields')
+      toast.error('Please fill out all fields', {
+        position: 'top-center'
+      })
       return
     }
     const { email, password } = form
@@ -170,7 +179,7 @@ export default function EmailAuth({ children, handleSubmit, type }) {
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword} 
+                      onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                     >
                       {showPassword ? <Visibility /> : <VisibilityOff />}
@@ -196,18 +205,18 @@ export default function EmailAuth({ children, handleSubmit, type }) {
                 sx={{ mb: 1, mt: 1 }}
                 autoComplete="current-password"
                 InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword} 
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
               />
             )}
             <Button

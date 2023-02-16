@@ -22,6 +22,7 @@ import {
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import md5 from 'md5'
+import { toast } from 'react-toastify'
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -73,7 +74,9 @@ const logInAnonymously = async () => {
     }
   } catch (err) {
     console.error(err)
-    alert(err.message)
+    toast.error(err.message, {
+      position: 'top-center'
+    })
   }
 }
 
@@ -94,7 +97,9 @@ const signInWithGoogle = async () => {
     }
   } catch (err) {
     console.error(err)
-    alert(err.message)
+    toast.error(err.message, {
+      position: 'top-center'
+    })
   }
 }
 
@@ -115,7 +120,9 @@ const signInWithGithub = async () => {
     }
   } catch (err) {
     console.error(err)
-    alert(err.message)
+    toast.error(err.message, {
+      position: 'top-center'
+    })
   }
 }
 
@@ -124,7 +131,9 @@ const logInWithEmailAndPassword = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password)
   } catch (err) {
     console.error(err)
-    alert(err.message)
+    toast.error(err.message, {
+      position: 'top-center'
+    })
   }
 }
 
@@ -141,17 +150,23 @@ const registerWithEmailAndPassword = async (name, email, password) => {
     })
   } catch (err) {
     console.error(err)
-    alert(err.message)
+    toast.error(err.message, {
+      position: 'top-center'
+    })
   }
 }
 
 const sendPasswordReset = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email)
-    alert('Password reset link sent!')
+    toast.success('Password reset email sent', {
+      position: 'top-center'
+    })
   } catch (err) {
     console.error(err)
-    alert(err.message)
+    toast.error(err.message, {
+      position: 'top-center'
+    })
   }
 }
 
