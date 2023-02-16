@@ -32,7 +32,11 @@ export default function Channels({
     return (
       <Button
         onClick={() => handleGroupClick(channel)}
-        style={{ cursor: 'pointer', marginLeft: '2em', display: 'block' }}
+        sx={{
+          cursor: 'pointer',
+          marginLeft: '2em',
+          display: 'block'
+        }}
         key={channel.id}
         variant="text"
       >

@@ -36,6 +36,41 @@ export default function EmailAuth({ children, handleSubmit, type }) {
   })
   const [showPassword, setShowPassword] = useState(false)
 
+  // Submit functions
+  const register = () => {
+    if (form.password !== form.confirmPassword) {
+      toast.error('Passwords do not match', {
+        position: 'top-center'
+      })
+      return
+    }
+    if (!form.email || !form.password || !form.name) {
+      toast.error('Please fill out all fields', {
+        position: 'top-center'
+      })
+      return
+    }
+    if (form.password.length < 6) {
+      toast.error('Password must be at least 6 characters', {
+        position: 'top-center'
+      })
+      return
+    }
+    const { name, email, password } = form
+    handleSubmit(name, email, password)
+  }
+
+  const login = () => {
+    if (!form.email || !form.password) {
+      toast.error('Please fill out all fields', {
+        position: 'top-center'
+      })
+      return
+    }
+    const { email, password } = form
+    handleSubmit(email, password)
+  }
+
   // Handle functions
   const handleBlur = (field) => (evt) => {
     setForm({
@@ -90,44 +125,20 @@ export default function EmailAuth({ children, handleSubmit, type }) {
     return hasError ? shouldShow : false
   }
 
-  // Submit functions
-  const register = () => {
-    if (form.password !== form.confirmPassword) {
-      toast.error('Passwords do not match', {
-        position: 'top-center'
-      })
-      return
-    }
-    if (!form.email || !form.password || !form.name) {
-      toast.error('Please fill out all fields', {
-        position: 'top-center'
-      })
-      return
-    }
-    if (form.password.length < 6) {
-      toast.error('Password must be at least 6 characters', {
-        position: 'top-center'
-      })
-      return
-    }
-    const { name, email, password } = form
-    handleSubmit(name, email, password)
-  }
-
-  const login = () => {
-    if (!form.email || !form.password) {
-      toast.error('Please fill out all fields', {
-        position: 'top-center'
-      })
-      return
-    }
-    const { email, password } = form
-    handleSubmit(email, password)
-  }
-
   return (
     <>
-      <span onClick={handleClickOpen}>{children}</span>
+      <Button
+        variant="contained"
+        fullWidth
+        sx={{
+          marginBottom: '8px',
+          backgroundColor: '#db4437',
+          color: '#ffffff'
+        }}
+        onClick={handleClickOpen}
+      >
+        {children}
+      </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle textAlign="center">
           {type === 'register' ? 'Register' : 'Login'}

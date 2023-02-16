@@ -1,9 +1,8 @@
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import {
   auth,
@@ -59,19 +58,8 @@ export default function Auth() {
                     type={'login'}
                     handleSubmit={logInWithEmailAndPassword}
                   >
-                    <Button
-                      variant="contained"
-                      type="submit"
-                      fullWidth
-                      sx={{
-                        marginBottom: '8px',
-                        backgroundColor: '#db4437',
-                        color: '#ffffff'
-                      }}
-                    >
-                      <MarkEmailReadIcon />
-                      Login /w Email
-                    </Button>
+                    <MarkEmailReadIcon />
+                    Login /w Email
                   </EmailAuth>
                 </Grid>
                 <Grid item xs={6}>
@@ -79,19 +67,8 @@ export default function Auth() {
                     type={'register'}
                     handleSubmit={registerWithEmailAndPassword}
                   >
-                    <Button
-                      variant="contained"
-                      type="submit"
-                      fullWidth
-                      sx={{
-                        marginBottom: '8px',
-                        backgroundColor: '#db4437',
-                        color: '#ffffff'
-                      }}
-                    >
-                      <MailOutlineIcon />
-                      Register /w Email
-                    </Button>
+                    <MailOutlineIcon />
+                    Register /w Email
                   </EmailAuth>
                 </Grid>
               </Grid>

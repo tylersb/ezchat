@@ -26,13 +26,13 @@ export default function MessageForm({ userData, activeGroupId }) {
     }
   }
 
-  const handleUpload = async (e) => {
+  const handleUpload = (e) => {
+    e.preventDefault()
+    if (!file)
+      return toast.error('Please select a file to upload', {
+        position: 'top-center'
+      })
     try {
-      e.preventDefault()
-      if (!file)
-        return toast.error('Please select a file to upload', {
-          position: 'top-center'
-        })
       const storageRef = ref(storage, `images/${uuidv4()}-${file.name}`)
       const uploadTask = uploadBytesResumable(storageRef, file)
       uploadTask.on(
@@ -61,7 +61,6 @@ export default function MessageForm({ userData, activeGroupId }) {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL)
             addDoc(collection(db, 'messages'), {
               groupId: activeGroupId,
               content: downloadURL,
@@ -116,7 +115,6 @@ export default function MessageForm({ userData, activeGroupId }) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           type="text"
-          className={loading ? 'loading' : ''}
           display="block"
           fullWidth
           autoFocus

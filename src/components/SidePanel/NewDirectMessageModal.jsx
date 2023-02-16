@@ -46,7 +46,7 @@ export default function NewDirectMessageModal({ addNewDirectMessage }) {
     <>
       <Button
         onClick={handleClickOpen}
-        style={{ background: 'transparent', color: 'white' }}
+        sx={{ background: 'transparent', color: 'white' }}
         floated="right"
       >
         <Add />

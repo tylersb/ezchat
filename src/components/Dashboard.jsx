@@ -75,8 +75,8 @@ export default function Dashboard() {
   }
 
   const userEmail = (uid) => {
-    const user = users?.find((user) => user.uid === uid)
-    return user?.email
+    const foundUser = users?.find((user) => user.uid === uid)
+    return foundUser?.email
   }
 
   const drawer = (

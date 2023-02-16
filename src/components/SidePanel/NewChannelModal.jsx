@@ -35,7 +35,7 @@ export default function NewChannelModal({ addNewChannel }) {
     <>
       <Button
         onClick={handleClickOpen}
-        style={{ background: 'transparent', color: 'white' }}
+        sx={{ background: 'transparent', color: 'white' }}
         floated="right"
       >
         <Add />
@@ -47,7 +47,6 @@ export default function NewChannelModal({ addNewChannel }) {
             Please enter a name and description for the new channel
           </DialogContentText>
           <TextField
-            autoFocus
             margin="dense"
             id="name"
             label="Channel Name"
@@ -58,7 +57,6 @@ export default function NewChannelModal({ addNewChannel }) {
             autoComplete="off"
           />
           <TextField
-            autoFocus
             margin="dense"
             id="name"
             label="Channel Description"
