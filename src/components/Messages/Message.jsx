@@ -4,7 +4,8 @@ import {
   ListItemAvatar,
   ListItemText,
   Avatar,
-  Typography
+  Typography,
+  Box
 } from '@mui/material'
 import { forwardRef } from 'react'
 
@@ -32,8 +33,7 @@ export default forwardRef(function Message({ message, userData, users }, ref) {
               {userInfo?.name}
             </Typography>
             <Typography
-              sx={{ display: 'inline',
-                marginLeft: '5px', }}
+              sx={{ display: 'inline', marginLeft: '5px' }}
               component="span"
               variant="caption"
               color="text.secondary"
@@ -43,14 +43,14 @@ export default forwardRef(function Message({ message, userData, users }, ref) {
           </>
         }
         secondary={
-          <Typography
-            sx={{ display: 'inline' }}
-            component="span"
-            variant="body2"
-            color="text.primary"
-          >
-            {message?.content.stringValue}
-          </Typography>
+            <Typography
+              sx={{ display: 'inline-block', wordBreak: 'break-word' }}
+              component="span"
+              variant="body2"
+              color="text.primary"
+            >
+              {message?.content.stringValue}
+            </Typography>
         }
         ref={ref}
       />

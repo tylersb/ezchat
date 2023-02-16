@@ -71,6 +71,11 @@ export default function Messages({ userData, activeGroupId, groups }) {
       </Grid>
       <Grid
         xs={12}
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          zIndex: 1
+        }}
       >
         <MessageForm
           userData={userData}

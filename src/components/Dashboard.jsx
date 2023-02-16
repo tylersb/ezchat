@@ -62,6 +62,7 @@ export default function Dashboard() {
   }
   const handleGroupClick = (group) => {
     setActiveGroupId(group?.id)
+    setMobileOpen(false)
   }
 
   // If there are groups, set the active group to the first group

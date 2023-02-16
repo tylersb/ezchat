@@ -116,8 +116,7 @@ export default function MessageForm({ userData, activeGroupId }) {
           type="text"
           className={loading ? 'loading' : ''}
           display="inline"
-          fullWidth
-          disabled={loading}
+          fullWidth          
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
