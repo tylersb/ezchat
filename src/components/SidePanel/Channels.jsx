@@ -1,7 +1,7 @@
 import { db } from '../../firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import NewChannelModal from './NewChannelModal'
-import { Box, Skeleton, Typography, Button, List } from '@mui/material'
+import { Box, Skeleton, Typography, Button } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
 import { toast } from 'react-toastify'
 
@@ -13,7 +13,7 @@ export default function Channels({
 }) {
   const addNewChannel = async (channel) => {
     try {
-        await addDoc(collection(db, 'groups'), {
+      await addDoc(collection(db, 'groups'), {
         ...channel,
         createdAt: serverTimestamp(),
         users: [userData?.uid],
@@ -27,18 +27,16 @@ export default function Channels({
   }
 
   const displayChannels = groups?.docs?.map((channel) => {
-    if (
-      channel._document.data.value.mapValue.fields.type.stringValue !==
-      'channel'
-    )
-      return null
+    const channelData = channel.data()
+    if (channelData.type !== 'channel') return null
     return (
       <Button
         onClick={() => handleGroupClick(channel)}
         style={{ cursor: 'pointer', marginLeft: '2em', display: 'block' }}
         key={channel.id}
+        variant="text"
       >
-        # {channel._document.data.value.mapValue.fields.name.stringValue}
+        <Typography># {channelData.name}</Typography>
       </Button>
     )
   })
@@ -68,11 +66,9 @@ export default function Channels({
         </Box>
         <Box>
           {groupsloading ? (
-            <Skeleton variant="rectangular" width={210} height={118} />
+            <Skeleton variant="rectangular" width="100%" height="100%" />
           ) : (
-            <List>
-              {displayChannels}
-            </List>
+            <>{displayChannels}</>
           )}
         </Box>
       </Grid>

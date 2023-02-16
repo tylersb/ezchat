@@ -41,8 +41,9 @@ export default function DirectMessages({
         onClick={() => handleGroupClick(channel)}
         style={{ cursor: 'pointer', marginLeft: '2em', display: 'block' }}
         key={channel.id}
+        variant="text"
       >
-        <Typography variant="body1">
+        <Typography>
           {userEmail(channelData.users.find((user) => user !== userData?.uid))}
         </Typography>
       </Button>
@@ -76,7 +77,7 @@ export default function DirectMessages({
           {groupsloading ? (
             <Skeleton variant="rectangular" width="100%" height="100%" />
           ) : (
-            <List>{displayDirectMessages}</List>
+            <>{displayDirectMessages}</>
           )}
         </Box>
       </Grid>

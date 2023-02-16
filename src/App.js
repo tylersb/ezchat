@@ -33,12 +33,24 @@ function App() {
   const lightTheme = createTheme({
     palette: {
       mode: 'light'
+    },
+    typography: {
+      fontFamily: 'Roboto',
+      button: {
+        textTransform: 'none'
+      }
     }
   })
 
   const darkTheme = createTheme({
     palette: {
       mode: 'dark'
+    },
+    typography: {
+      fontFamily: 'Roboto',
+      button: {
+        textTransform: 'none'
+      }
     }
   })
 

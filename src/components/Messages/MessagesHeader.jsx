@@ -7,9 +7,7 @@ export default function MessagesHeader({
   groups,
   userEmail
 }) {
-  const groupData = groups?.docs
-    ?.find((group) => group.id === activeGroupId)
-    .data()
+  const groupData = groups?.docs?.find((group) => group.id === activeGroupId)?.data()
   const totalMembers = groupData?.users?.length || 0
 
   return (
