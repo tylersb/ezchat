@@ -81,7 +81,7 @@ export default forwardRef(function Message({ message, userData, users }, ref) {
             >
               <img
                 src={message?.content?.stringValue}
-                alt={`uploaded image by ${userInfo?.name}`}
+                alt={`uploaded by ${userInfo?.name}`}
                 style={{ maxWidth: '100%', maxHeight: '100%' }}
               />
             </Box>
@@ -99,7 +99,7 @@ export default forwardRef(function Message({ message, userData, users }, ref) {
       >
         <img
           src={message?.content?.stringValue}
-          alt={`uploaded image by ${userInfo?.name}`}
+          alt={`uploaded by ${userInfo?.name}`}
         />
       </Dialog>
     </ListItem>

@@ -6,10 +6,10 @@ import { auth } from '../../firebase'
 import Channels from './Channels'
 import ModeToggle from '../ModeToggle'
 import { Stack } from '@mui/material'
+import DirectMessages from './DirectMessages'
 
 export default function SidePanel({
   userData,
-  activeGroupId,
   handleGroupClick,
   groups,
   groupsloading,
@@ -24,7 +24,7 @@ export default function SidePanel({
 
   return (
     <Stack>
-      <Stack direction='row' justifyContent='space-between' >
+      <Stack direction="row" justifyContent="space-between">
         <UserPanel
           userData={userData}
           userDataLoading={userDataLoading}
@@ -34,7 +34,12 @@ export default function SidePanel({
       </Stack>
 
       <Channels
-        activeGroupId={activeGroupId}
+        handleGroupClick={handleGroupClick}
+        groups={groups}
+        groupsloading={groupsloading}
+        userData={userData}
+      />
+      <DirectMessages
         handleGroupClick={handleGroupClick}
         groups={groups}
         groupsloading={groupsloading}

@@ -12,16 +12,13 @@ import {
 import {
   Box,
   Skeleton,
-  Divider,
   AppBar,
   IconButton,
   Drawer,
-  Toolbar,
-  Typography
+  Toolbar
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import MessagesHeader from './Messages/MessagesHeader'
-import { max } from 'moment'
 
 export default function Dashboard() {
   // State
@@ -157,7 +154,7 @@ export default function Dashboard() {
           p: 0,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           maxWidth: { sm: `calc(100% - ${drawerWidth}px)` },
-          overflow: 'hidden',
+          overflow: 'hidden'
         }}
       >
         <Toolbar />

@@ -155,7 +155,7 @@ export default function Auth() {
                 Continue as Guest
               </Button>
             </Box>
-            <PassReset />
+            <PassReset sendPasswordReset={sendPasswordReset} />
           </Box>
         </Paper>
       </Grid>
