@@ -81,25 +81,22 @@ export default forwardRef(function Message({ message, userData, users }, ref) {
               }}
               onClick={handleClickOpen}
             >
-              {imageLoading ? (
-                <Skeleton variant="rectangular">
-                  <img
-                    loading="lazy"
-                    src={message?.content?.stringValue}
-                    alt={`uploaded by ${userInfo?.name}`}
-                    style={{ maxWidth: '100%', maxHeight: '100%' }}
-                    onLoad={() => setImageLoading(false)}
-                  />
-                </Skeleton>
-              ) : (
-                <img
-                  loading="lazy"
-                  src={message?.content?.stringValue}
-                  alt={`uploaded by ${userInfo?.name}`}
-                  style={{ maxWidth: '100%', maxHeight: '100%' }}
-                  onLoad={() => setImageLoading(false)}
-                />
-              )}
+              <Skeleton
+                variant="rectangular"
+                sx={{
+                  width: '500px',
+                  height: '500px',
+                  display: imageLoading ? 'block' : 'none'
+                }}
+              />
+              <img
+                loading="lazy"
+                src={message?.content?.stringValue}
+                alt={`uploaded by ${userInfo?.name}`}
+                style={{ maxWidth: '100%', maxHeight: '100%' }}
+                onLoad={() => setImageLoading(false)}
+                display={imageLoading ? 'none' : 'block'}
+              />
             </Box>
           ) : null
         }
