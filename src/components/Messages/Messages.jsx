@@ -7,7 +7,7 @@ import { Box, List } from '@mui/material'
 import { useRef, useEffect } from 'react'
 
 export default function Messages({ userData, activeGroupId, groups, users }) {
-  const [messages, messagesLoading, error] = useCollection(
+  const [messages] = useCollection(
     query(
       collection(db, 'messages'),
       orderBy('createdAt'),
@@ -15,12 +15,6 @@ export default function Messages({ userData, activeGroupId, groups, users }) {
     ),
     { idField: 'id' }
   )
-
-  const userList = groups?.docs
-    ?.find((group) => group.id === activeGroupId)
-    ?._document?.data?.value?.mapValue?.fields?.users?.arrayValue?.values?.map(
-      (user) => user?.stringValue
-    ) || [null]
 
   const messagesEndRef = useRef(null)
 
@@ -38,7 +32,6 @@ export default function Messages({ userData, activeGroupId, groups, users }) {
       <Message
         key={message.id}
         message={data}
-        userData={userData}
         users={users}
         ref={messagesEndRef}
       />

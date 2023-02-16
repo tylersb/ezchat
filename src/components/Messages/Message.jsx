@@ -16,7 +16,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-export default forwardRef(function Message({ message, userData, users }, ref) {
+export default forwardRef(function Message({ message, users }, ref) {
   const [open, setOpen] = useState(false)
   const [imageLoading, setImageLoading] = useState(true)
 

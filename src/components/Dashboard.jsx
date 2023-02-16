@@ -19,21 +19,21 @@ export default function Dashboard() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   // Firebase Hooks
-  const [groups, groupsloading, error] = useCollection(
+  const [groups, groupsloading] = useCollection(
     query(
       collection(db, 'groups'),
       where('users', 'array-contains', auth.currentUser?.uid || null)
     ),
     { idField: 'id' }
   )
-  const [userData, userDataLoading, userDataError] = useCollectionData(
+  const [userData, userDataLoading] = useCollectionData(
     query(
       collection(db, 'users'),
       where('uid', '==', auth.currentUser?.uid || null)
     ),
     { idField: 'uid' }
   )
-  const [users, usersLoading, usersError] = useCollectionData(
+  const [users] = useCollectionData(
     query(
       collection(db, 'users')
       // where('uid', 'in', userList)
@@ -50,7 +50,7 @@ export default function Dashboard() {
   // If user is not logged in, redirect to login page
   useEffect(() => {
     if (loading) return
-    if (!user) return navigate('/auth')
+    if (!user) navigate('/auth')
   }, [user, loading, navigate])
 
   // Click handlers
@@ -68,7 +68,7 @@ export default function Dashboard() {
   }
 
   const userEmail = (uid) => {
-    const foundUser = users?.find((user) => user.uid === uid)
+    const foundUser = users?.find((checkUser) => checkUser.uid === uid)
     return foundUser?.email
   }
 

@@ -1,7 +1,7 @@
 import { db } from '../../firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import NewDirectMessageModal from './NewDirectMessageModal'
-import { Box, Skeleton, Typography, Button, List } from '@mui/material'
+import { Box, Typography, Button } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
 import { toast } from 'react-toastify'
 
@@ -55,36 +55,28 @@ export default function DirectMessages({
   })
 
   return (
-    <>
-      <Grid>
+    <Grid>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center'
+        }}
+      >
         <Box
           sx={{
             display: 'flex',
-            alignItems: 'center'
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%'
           }}
         >
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '100%'
-            }}
-          >
-            <Typography variant="h6" sx={{ marginLeft: '1em' }}>
-              Direct Messages
-            </Typography>
-            <NewDirectMessageModal addNewDirectMessage={addNewDirectMessage} />
-          </Box>
+          <Typography variant="h6" sx={{ marginLeft: '1em' }}>
+            Direct Messages
+          </Typography>
+          <NewDirectMessageModal addNewDirectMessage={addNewDirectMessage} />
         </Box>
-        <Box>
-          {groupsloading ? (
-            <Skeleton variant="rectangular" width="100%" height="100%" />
-          ) : (
-            <>{displayDirectMessages}</>
-          )}
-        </Box>
-      </Grid>
-    </>
+      </Box>
+      <Box>{displayDirectMessages}</Box>
+    </Grid>
   )
 }

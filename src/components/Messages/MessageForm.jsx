@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import { db } from '../../firebase'
+import { db, storage } from '../../firebase'
 import {
   TextField,
   IconButton,
@@ -8,7 +8,6 @@ import {
   Stack,
   Box
 } from '@mui/material'
-import { storage } from '../../firebase'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import UploadSharpIcon from '@mui/icons-material/UploadSharp'
 import SendSharpIcon from '@mui/icons-material/SendSharp'
@@ -86,6 +85,7 @@ export default function MessageForm({ userData, activeGroupId }) {
       )
       setFile(null)
       fileInputRef.current.value = ''
+      return null
     } catch (err) {
       console.error(err)
     }
@@ -107,7 +107,9 @@ export default function MessageForm({ userData, activeGroupId }) {
       setLoading(false)
     } catch (err) {
       console.error(err)
-      alert('An error occured while sending message')
+      toast.error('Error sending message', {
+        position: 'top-center'
+      })
       setLoading(false)
     }
   }

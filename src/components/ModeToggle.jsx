@@ -7,7 +7,7 @@ import { ColorModeContext } from './contexts/ColorModeContext'
 
 export default function ModeToggle() {
   const theme = useTheme()
-  const colorMode = useContext(ColorModeContext)
+  const handleColorMode = useContext(ColorModeContext)
 
   return (
     <Box
@@ -20,7 +20,7 @@ export default function ModeToggle() {
     >
       <IconButton
         sx={{ ml: 1 }}
-        onClick={colorMode.toggleColorMode}
+        onClick={handleColorMode.toggleColorMode}
         color="inherit"
       >
         {theme.palette.mode === 'dark' ? (

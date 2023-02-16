@@ -1,5 +1,4 @@
-import { Typography, Box } from '@mui/material'
-import { Skeleton } from '@mui/material'
+import { Typography, Box, Skeleton } from '@mui/material'
 
 export default function MessagesHeader({
   userData,
@@ -7,15 +6,15 @@ export default function MessagesHeader({
   groups,
   userEmail
 }) {
-  const groupData = groups?.docs?.find((group) => group.id === activeGroupId)?.data()
+  const groupData = groups?.docs
+    ?.find((group) => group.id === activeGroupId)
+    ?.data()
   const totalMembers = groupData?.users?.length || 0
 
   return (
     <Box>
       {!groups ? (
-        <Skeleton variant="rectangular" 
-          width={210} height={'100%'}
-        />
+        <Skeleton variant="rectangular" width={210} height={'100%'} />
       ) : (
         <>
           <Typography variant="h6">
