@@ -1,6 +1,7 @@
 import { Typography, Box, Skeleton } from '@mui/material'
 import ChannelMenu from '../ChannelMenu'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import EditChannelInterface from '../EditChannelInterface'
 
 export default function MessagesHeader({
   userData,
@@ -9,6 +10,8 @@ export default function MessagesHeader({
   userEmail,
   setActiveGroupId
 }) {
+  const [openEdit, setOpenEdit] = useState(false)
+
   const anchorRef = useRef(null)
 
 
@@ -52,10 +55,16 @@ export default function MessagesHeader({
           anchorRef={anchorRef}
           activeGroupId={activeGroupId}
           setActiveGroupId={setActiveGroupId}
+          openEdit={openEdit}
+          setOpenEdit={setOpenEdit}
           />
         </Box>
       )}
       <Typography variant="subtitle2">{totalMembers} Users</Typography>
+      <EditChannelInterface openEdit={openEdit} setOpenEdit={setOpenEdit} groupData={groupData}
+      activeGroupId={activeGroupId}
+      setActiveGroupId={setActiveGroupId}
+      />
     </Box>
   )
 }

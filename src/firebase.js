@@ -21,7 +21,8 @@ import {
   addDoc,
   doc,
   updateDoc,
-  arrayRemove
+  arrayRemove,
+  deleteDoc
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import md5 from 'md5'
@@ -191,6 +192,43 @@ const leaveGroup = async (groupId, userId) => {
   }
 }
 
+const editGroup = async (groupId, { name, description }) => {
+  try {
+    console.log(name, description, groupId)
+    const groupRef = doc(db, 'groups', groupId)
+    await updateDoc(groupRef, {
+      name: name,
+      description: description
+    })
+  } catch (err) {
+    console.error(err)
+    toast.error('Error when attempting to edit channel', {
+      position: 'top-center'
+    })
+  }
+}
+
+const deleteGroup = async (groupId) => {
+  try {
+    const groupRef = doc(db, 'groups', groupId)
+    // const messagesRef = collection(
+    //   db,
+    //   'messages',
+    //   where('groupId', '==', groupId)
+    // )
+    // const messages = await getDocs(messagesRef)
+    // messages.forEach(async (message) => {
+    //   await deleteDoc(message)
+    // })
+    await deleteDoc(groupRef)
+  } catch (err) {
+    console.error(err)
+    toast.error('Error when attempting to delete channel', {
+      position: 'top-center'
+    })
+  }
+}
+
 export {
   auth,
   db,
@@ -202,5 +240,7 @@ export {
   sendPasswordReset,
   logInAnonymously,
   leaveGroup,
+  editGroup,
+  deleteGroup,
   logout
 }

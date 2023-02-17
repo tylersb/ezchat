@@ -14,7 +14,7 @@ export default function NewChannelModal({ addNewChannel }) {
   const [open, setOpen] = useState(false)
   const [channel, setChannel] = useState({
     name: '',
-    details: ''
+    description: ''
   })
 
   const handleClickOpen = () => {
@@ -27,7 +27,7 @@ export default function NewChannelModal({ addNewChannel }) {
 
   const handleSubmit = () => {
     addNewChannel(channel)
-    setChannel({ name: '', details: '' })
+    setChannel({ name: '', description: '' })
     setOpen(false)
   }
 
@@ -62,9 +62,9 @@ export default function NewChannelModal({ addNewChannel }) {
             label="Channel Description"
             type="text"
             fullWidth
-            value={channel.details}
+            value={channel.description}
             onChange={(e) =>
-              setChannel({ ...channel, details: e.target.value })
+              setChannel({ ...channel, description: e.target.value })
             }
             autoComplete="off"
           />

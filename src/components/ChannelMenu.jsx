@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, Fragment } from 'react'
 import {
   IconButton,
   MenuList,
@@ -14,14 +14,15 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import { leaveGroup } from '../firebase'
 import ConfirmationDialog from './ConfirmationDialog'
-import EditChannelInterface from './EditChannelInterface'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 export default function ChannelMenu({
   userData,
   groupData,
   anchorRef,
   activeGroupId,
-  setActiveGroupId
+  setActiveGroupId,
+  setOpenEdit
 }) {
   // State
   const [open, setOpen] = useState(false)
@@ -119,11 +120,14 @@ export default function ChannelMenu({
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <EditChannelInterface
-                    handleCloseMenu={handleClose}
-                    groupData={groupData}
-                  />
-                  <MenuItem onClick={handleClose}></MenuItem>
+                <MenuItem onClick={() => setOpenEdit(true)}
+                sx={{display: groupData?.type === 'channel' ? '' : 'none'}}
+                >
+                    <ListItemIcon>
+                      <SettingsIcon fontSize="small" />
+                    </ListItemIcon>
+                    <Typography variant="inherit">Edit Channel</Typography>
+                  </MenuItem>
                   <MenuItem onClick={handleOpenConfirm}>
                     <ListItemIcon>
                       <ExitToAppIcon fontSize="small" />

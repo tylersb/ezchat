@@ -1,46 +1,70 @@
-import { useState, forwardRef } from 'react'
+import { useState, forwardRef, useEffect } from 'react'
 import {
   Button,
   Dialog,
-  MenuItem,
-  ListItemIcon,
   AppBar,
   Toolbar,
   IconButton,
   Typography,
   Slide,
+  Unstable_Grid2 as Grid,
+  TextField,
   Container
 } from '@mui/material'
-import SettingsIcon from '@mui/icons-material/Settings'
 import CloseIcon from '@mui/icons-material/Close'
+import { editGroup, deleteGroup } from '../firebase'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-export default function EditChannelInterface({ handleCloseMenu, groupData }) {
-  const [open, setOpen] = useState(false)
+export default function EditChannelInterface({
+  openEdit,
+  setOpenEdit,
+  groupData,
+  activeGroupId,
+  setActiveGroupId
+}) {
+  const [channelDetails, setChannelDetails] = useState({
+    name: '',
+    description: ''
+  })
 
-  const handleClickOpen = () => {
-    setOpen(true)
-    handleCloseMenu()
-  }
+  useEffect(() => {
+    setChannelDetails({
+      name: groupData?.name,
+      description: groupData?.description
+    })
+  }, [groupData])
 
   const handleClose = () => {
-    setOpen(false)
+    setOpenEdit(false)
+  }
+
+  const handleEditGroup = async () => {
+    try {
+      await editGroup(activeGroupId, channelDetails)
+      setOpenEdit(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleDeleteGroup = async () => {
+    try {
+      await deleteGroup(activeGroupId)
+      setActiveGroupId('')
+      setOpenEdit(false)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
     <div>
-      <MenuItem onClick={handleClickOpen}>
-        <ListItemIcon>
-          <SettingsIcon fontSize="small" />
-        </ListItemIcon>
-        <Typography variant="inherit">Edit Channel</Typography>
-      </MenuItem>
       <Dialog
-        fullScreen
-        open={open}
+        // fullScreen
+        open={openEdit}
         onClose={handleClose}
         TransitionComponent={Transition}
       >
@@ -57,16 +81,62 @@ export default function EditChannelInterface({ handleCloseMenu, groupData }) {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Edit Channel
             </Typography>
-            <Button color="inherit" onClick={handleClose}>
+            <Button color="inherit" onClick={handleEditGroup}>
               save
             </Button>
           </Toolbar>
         </AppBar>
-        <Container>
-          <h1>Edit Channel</h1>
-          <p>Channel Name: {groupData.name}</p>
-          <p>Channel Description: {groupData.description}</p>
+        <Container
+          maxWidth="sm"
+          sx={{
+            py: 4,
+            px: 2
+          }}
+        >
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                id="channelName"
+                name="channelName"
+                label="Channel Name"
+                fullWidth
+                autoComplete="channel-name"
+                value={channelDetails.name}
+                onChange={(e) =>
+                  setChannelDetails({
+                    ...channelDetails,
+                    name: e.target.value
+                  })
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                id="channelDescription"
+                name="channelDescription"
+                label="Channel Description"
+                fullWidth
+                autoComplete="channel-description"
+                value={channelDetails.description}
+                onChange={(e) =>
+                  setChannelDetails({
+                    ...channelDetails,
+                    description: e.target.value
+                  })
+                }
+              />
+            </Grid>
+          </Grid>
         </Container>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => deleteGroup(activeGroupId)}
+        >
+          Delete Channel
+        </Button>
       </Dialog>
     </div>
   )
