@@ -231,22 +231,6 @@ const deleteGroup = async (groupId) => {
     })
     batch.delete(groupRef)
     await batch.commit()
-
-    // const snapshot = await collection('messages')
-    //   .where('groupId', '==', groupId)
-    //   .get()
-    // const MAX_WRITES_PER_BATCH = 500
-
-    // const batches = _.chunk(snapshot.docs, MAX_WRITES_PER_BATCH)
-    // const commitBatchPromises = []
-
-    // batches.forEach((batch) => {
-    //   const writeBatch = batch()
-    //   batch.forEach((doc) => writeBatch.delete(doc.ref))
-    //   commitBatchPromises.push(writeBatch.commit())
-    // })
-
-    // await Promise.all(commitBatchPromises)
   } catch (err) {
     console.error(err)
     toast.error('Error when attempting to delete channel', {

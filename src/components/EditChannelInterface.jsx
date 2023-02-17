@@ -31,6 +31,7 @@ export default function EditChannelInterface({
   })
 
   useEffect(() => {
+    if (!groupData) return
     setChannelDetails({
       name: groupData?.name,
       description: groupData?.description
@@ -137,7 +138,7 @@ export default function EditChannelInterface({
         <Button
           variant="contained"
           color="error"
-          onClick={() => deleteGroup(activeGroupId)}
+          onClick={handleDeleteGroup}
         >
           Delete Channel
         </Button>
