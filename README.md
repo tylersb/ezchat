@@ -5,10 +5,11 @@ A chat app that includes channels for group discussions as well as direct messag
 ## Tech Stack
 - Nodejs
 - React
-- Redux
 - Firebase
-- Semantic-UI
 - Moment
+- react-router-dom
+- react-toastify
+- MUI for styling
 
 ## Wireframes
 - Channel View
