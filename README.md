@@ -2,6 +2,8 @@
 
 A chat app that includes channels for group discussions as well as direct messaging options for private conversations.
 
+![chatapp](./public/chatapp.png)
+
 ## Tech Stack
 - Nodejs
 - React
@@ -10,6 +12,19 @@ A chat app that includes channels for group discussions as well as direct messag
 - react-router-dom
 - react-toastify
 - MUI for styling
+
+## Installation Instructions
+Clone the repository down then go into the folder that was just created and run 'npm i' which should install all the technologies required for the front end/client.
+The backend uses multiple services from Firebase (Firestore, Authentication, & Firebase Storage) as well as Tenor integration for gifs so you'll need your own account/configuration settings which will connect automatically if you set your own values in a .env.local file. These fields are mapped in the application(make sure these are all prefixed with "REACT_APP_" in your .env):
+API_KEY
+AUTH_DOMAIN
+DATABASE_URL
+PROJECT_ID
+STORAGE_BUCKET
+MESSAGING_SENDER_ID
+APP_ID
+MEASUREMENT_ID
+TENOR_API_KEY
 
 ## Wireframes
 - Channel View
@@ -81,3 +96,8 @@ Prepare the app for deployment.
 - Expanded profile details customization
 - Direct chats between users or groups of users
 - Inline video player for links
+
+## Unsolved problems
+I didn't have time to implement avatars, profile details or an inline video player however I'm still planning on adding them soon and don't anticipate any particular roadblocks for those.
+
+The feature I'm currently working on is a way to display when a user has unread messages in any of the channels they're not currently in. I wasn't able to find a great way to track that in firestore based on any of the discussions I read from others but I'm planning on using a new lastSeen collection with a document per user that will hold an array of key value pairs where the key is the group/channel ID and the value is the timestamp for the most recently seen message in that channel.
