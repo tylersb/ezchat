@@ -7,13 +7,13 @@ import {
   Typography,
   Box,
   Dialog,
-  Slide,
+  Zoom,
   Skeleton
 } from '@mui/material'
 import { forwardRef, useState } from 'react'
 
 const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />
+  return <Zoom ref={ref} {...props} />
 })
 
 export default forwardRef(function Message({ messageData, users }, ref) {
@@ -29,14 +29,10 @@ export default forwardRef(function Message({ messageData, users }, ref) {
   }
 
   const timeStamp = moment(
-    messageData?.createdAt?.toDate(
-      messageData?.createdAt?.seconds * 1000
-    )
+    messageData?.createdAt?.toDate(messageData?.createdAt?.seconds * 1000)
   ).format('llll')
 
-  const userInfo = users?.find(
-    (user) => user?.uid === messageData?.uid
-  )
+  const userInfo = users?.find((user) => user?.uid === messageData?.uid)
 
   const isImage = messageData?.type === 'image'
   const isText = messageData?.type === 'text'
@@ -69,9 +65,7 @@ export default forwardRef(function Message({ messageData, users }, ref) {
           </>
         }
         secondary={
-          <Box
-          component="span"
-          >
+          <Box component="span">
             {isText && (
               <Typography
                 sx={{ display: 'inline-block', wordBreak: 'break-word' }}
@@ -105,7 +99,11 @@ export default forwardRef(function Message({ messageData, users }, ref) {
                   loading="lazy"
                   src={messageData?.content}
                   alt={`uploaded by ${userInfo?.name}`}
-                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    cursor: 'zoom-in'
+                  }}
                   onLoad={() => setImageLoading(false)}
                   display={imageLoading ? 'none' : 'block'}
                 />
@@ -134,7 +132,11 @@ export default forwardRef(function Message({ messageData, users }, ref) {
                   loading="lazy"
                   src={messageData?.content?.url}
                   alt={`uploaded by ${userInfo?.name}`}
-                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    cursor: 'zoom-in'
+                  }}
                   onLoad={() => setImageLoading(false)}
                   display={imageLoading ? 'none' : 'block'}
                 />
@@ -172,7 +174,7 @@ export default forwardRef(function Message({ messageData, users }, ref) {
         >
           <img
             loading="lazy"
-            src={messageData?.content}
+            src={messageData?.content.url}
             alt={`uploaded by ${userInfo?.name}`}
           />
         </Dialog>

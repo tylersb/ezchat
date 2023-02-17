@@ -174,6 +174,26 @@ const logout = () => {
   signOut(auth)
 }
 
+const leaveGroup = async (groupId, userId) => {
+  try {
+    const q = query(
+      collection(db, 'channels', groupId, 'users'),
+      where('uid', '==', userId)
+    )
+    const docs = await getDocs(q)
+    if (docs.docs.length > 0) {
+      const doc = docs.docs[0]
+      await doc.ref.delete()
+    }
+  } catch (err) {
+    console.error(err)
+    toast.error(err.message, {
+      position: 'top-center'
+    })
+  }
+}
+
+
 export {
   auth,
   db,
@@ -184,5 +204,6 @@ export {
   registerWithEmailAndPassword,
   sendPasswordReset,
   logInAnonymously,
+  leaveGroup,
   logout
 }
