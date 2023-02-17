@@ -52,9 +52,13 @@ export default function EditChannelInterface({
 
   const handleDeleteGroup = async () => {
     try {
+      setOpenEdit(false)
+      setChannelDetails({
+        name: '',
+        description: ''
+      })
       await deleteGroup(activeGroupId)
       setActiveGroupId('')
-      setOpenEdit(false)
     } catch (error) {
       console.log(error)
     }

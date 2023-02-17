@@ -22,11 +22,22 @@ import {
   doc,
   updateDoc,
   arrayRemove,
-  deleteDoc
+  deleteDoc,
+  batch,
+  limit,
+  writeBatch,
+  arrayUnion,
+  onSnapshot,
+  orderBy,
+  startAfter,
+  endBefore,
+  startAt,
+  endAt
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import md5 from 'md5'
 import { toast } from 'react-toastify'
+import _ from 'lodash'
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -211,16 +222,31 @@ const editGroup = async (groupId, { name, description }) => {
 const deleteGroup = async (groupId) => {
   try {
     const groupRef = doc(db, 'groups', groupId)
-    // const messagesRef = collection(
-    //   db,
-    //   'messages',
-    //   where('groupId', '==', groupId)
-    // )
-    // const messages = await getDocs(messagesRef)
-    // messages.forEach(async (message) => {
-    //   await deleteDoc(message)
+    const messagesRef = collection(db, 'messages')
+    const q = query(messagesRef, where('groupId', '==', groupId))
+    const querySnapshot = await getDocs(q)
+    const batch = writeBatch(db)
+    querySnapshot.forEach((doc) => {
+      batch.delete(doc.ref)
+    })
+    batch.delete(groupRef)
+    await batch.commit()
+
+    // const snapshot = await collection('messages')
+    //   .where('groupId', '==', groupId)
+    //   .get()
+    // const MAX_WRITES_PER_BATCH = 500
+
+    // const batches = _.chunk(snapshot.docs, MAX_WRITES_PER_BATCH)
+    // const commitBatchPromises = []
+
+    // batches.forEach((batch) => {
+    //   const writeBatch = batch()
+    //   batch.forEach((doc) => writeBatch.delete(doc.ref))
+    //   commitBatchPromises.push(writeBatch.commit())
     // })
-    await deleteDoc(groupRef)
+
+    // await Promise.all(commitBatchPromises)
   } catch (err) {
     console.error(err)
     toast.error('Error when attempting to delete channel', {
