@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase'
 import {
@@ -9,9 +9,7 @@ import {
   Box,
   Menu
 } from '@mui/material'
-
 import SendSharpIcon from '@mui/icons-material/SendSharp'
-
 import { toast } from 'react-toastify'
 import GifBoxIcon from '@mui/icons-material/GifBox'
 import GifPicker from 'gif-picker-react'
