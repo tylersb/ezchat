@@ -44,7 +44,7 @@ export default function Messages({ userData, activeGroupId, groups, users }) {
         sx={{
           overflow: 'auto',
           bgcolor: 'background.paper',
-          height: '84vh'
+          height: '88vh'
         }}
       >
         {displayMessages}

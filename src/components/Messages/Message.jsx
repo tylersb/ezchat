@@ -69,7 +69,9 @@ export default forwardRef(function Message({ messageData, users }, ref) {
           </>
         }
         secondary={
-          <Box>
+          <Box
+          component="span"
+          >
             {isText && (
               <Typography
                 sx={{ display: 'inline-block', wordBreak: 'break-word' }}
