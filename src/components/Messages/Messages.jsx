@@ -1,20 +1,10 @@
 import MessageForm from './MessageForm'
-import { useCollection } from 'react-firebase-hooks/firestore'
-import { db } from '../../firebase'
-import { query, collection, orderBy, where } from 'firebase/firestore'
+import { createOrUpdateLastSeen } from '../../firebase'
 import Message from './Message'
 import { Box, List } from '@mui/material'
 import { useRef, useEffect } from 'react'
 
-export default function Messages({ userData, activeGroupId, groups, users }) {
-  const [messages] = useCollection(
-    query(
-      collection(db, 'messages'),
-      orderBy('createdAt'),
-      where('groupId', '==', activeGroupId)
-    ),
-    { idField: 'id' }
-  )
+export default function Messages({ userData, activeGroupId, groups, users, messages }) {
 
   const messagesEndRef = useRef(null)
 
@@ -26,12 +16,17 @@ export default function Messages({ userData, activeGroupId, groups, users }) {
     scrollToBottom()
   }, [messages])
 
-  const displayMessages = messages?.docs?.map((message) => {
-    const messageData = message.data()
+  useEffect(() => {
+    if (activeGroupId && userData) {
+      createOrUpdateLastSeen(userData.uid, activeGroupId)
+    }
+  }, [activeGroupId, userData, messages])
+
+  const displayMessages = messages?.map((message) => {
     return (
       <Message
         key={message.id}
-        messageData={messageData}
+        messageData={message}
         users={users}
         ref={messagesEndRef}
       />

@@ -24,15 +24,11 @@ import {
   arrayRemove,
   deleteDoc,
   batch,
-  limit,
   writeBatch,
   arrayUnion,
-  onSnapshot,
-  orderBy,
-  startAfter,
-  endBefore,
-  startAt,
-  endAt
+  serverTimestamp,
+  getDoc,
+  setDoc
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import md5 from 'md5'
@@ -239,6 +235,24 @@ const deleteGroup = async (groupId) => {
   }
 }
 
+const createOrUpdateLastSeen = async (userId, groupId) => {
+  try {
+    const lastSeenRef = doc(db, 'lastSeen', `${userId}_${groupId}`)
+    const lastSeenDoc = await getDoc(lastSeenRef)
+    if (lastSeenDoc.exists()) {
+      await updateDoc(lastSeenRef, {
+        timestamp: serverTimestamp()
+      })
+    } else {
+      await setDoc(lastSeenRef, {
+        timestamp: serverTimestamp()
+      })
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export {
   auth,
   db,
@@ -252,5 +266,6 @@ export {
   leaveGroup,
   editGroup,
   deleteGroup,
+  createOrUpdateLastSeen,
   logout
 }

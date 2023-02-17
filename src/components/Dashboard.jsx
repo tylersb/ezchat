@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useNavigate } from 'react-router-dom'
 import { auth, db } from '../firebase'
-import { query, collection, where } from 'firebase/firestore'
+import { query, collection, where, orderBy } from 'firebase/firestore'
 import SidePanel from './SidePanel/SidePanel'
 import Messages from './Messages/Messages'
 import {
@@ -33,6 +33,7 @@ export default function Dashboard() {
     ),
     { idField: 'uid' }
   )
+
   const [users] = useCollectionData(
     query(
       collection(db, 'users')
@@ -41,6 +42,23 @@ export default function Dashboard() {
     { idField: 'uid' }
   )
 
+  const userGroups = []
+  groups?.docs?.forEach((group) => {
+    userGroups.push(group.id)
+  })
+
+  const whereValue = userGroups?.length > 0 ? 'in' : '=='
+
+  const [messages, messagesLoading, messagesError] = useCollection(
+    query(
+      collection(db, 'messages'),
+      orderBy('createdAt'),
+      where('groupId', whereValue, userGroups || activeGroupId)
+    ),
+    { idField: 'id' }
+  )
+
+  console.log('messages', messages?.docs.map((doc) => doc.data()))
   // Firebase hook to check if user is logged in
   const [user, loading] = useAuthState(auth)
 
@@ -89,7 +107,14 @@ export default function Dashboard() {
   const drawerWidth = 240
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', width: '100vw', alignItems: 'center' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        height: '100vh',
+        width: '100vw',
+        alignItems: 'center'
+      }}
+    >
       <AppBar
         position="fixed"
         sx={{
@@ -167,6 +192,9 @@ export default function Dashboard() {
           activeGroupId={activeGroupId}
           groups={groups}
           users={users}
+          messages={messages?.docs?.map((doc) => {
+            return { ...doc.data(), id: doc.id }
+          }).filter((message) => message.groupId === activeGroupId)}
         />
       </Box>
     </Box>
