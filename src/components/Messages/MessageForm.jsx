@@ -14,26 +14,13 @@ export default function MessageForm({ userData, activeGroupId }) {
   // State
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
-  // const [open, setOpen] = useState({
-  //   gif: false,
-  //   emoji: false,
-  //   file: false
-  // })
   const [openGif, setOpenGif] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
 
   // Refs
   const gifPickerRef = useRef(null)
 
-  // Handle clicks/actions
-
-  // const handleOpen = (e) => {
-  //   setOpen({
-  //     ...open,
-  //     [e.currentTarget.name]: true
-  //   })
-  // }
-
+  // Handlers
   const handleOpenDialog = () => {
     setOpenDialog(true)
   }
@@ -162,20 +149,6 @@ export default function MessageForm({ userData, activeGroupId }) {
             onGifClick={handleSendGif}
           />
         </Menu>
-        {/* <Menu
-          id="emoji-picker"
-          anchorEl={
-            gifPickerRef.current ? gifPickerRef.current.parentElement.parentElement.parentElement : null
-          }
-          open={openEmoji}
-          onClose={handleCloseEmoji}
-          MenuListProps={{
-            'aria-labelledby': 'emoji-picker',
-            sx: { p: 0 }
-          }}
-        >
-          <Picker set="native" onEmojiSelect={handleEmojiSelect} data={data} />
-        </Menu> */}
       </Box>
     </Box>
   )
