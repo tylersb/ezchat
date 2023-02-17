@@ -28,7 +28,9 @@ import {
   arrayUnion,
   serverTimestamp,
   getDoc,
-  setDoc
+  setDoc,
+  FieldPath,
+  orderBy
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import md5 from 'md5'
@@ -235,23 +237,25 @@ const deleteGroup = async (groupId) => {
   }
 }
 
-const createOrUpdateLastSeen = async (userId, groupId) => {
-  try {
-    const lastSeenRef = doc(db, 'lastSeen', `${userId}_${groupId}`)
-    const lastSeenDoc = await getDoc(lastSeenRef)
-    if (lastSeenDoc.exists()) {
-      await updateDoc(lastSeenRef, {
-        timestamp: serverTimestamp()
-      })
-    } else {
-      await setDoc(lastSeenRef, {
-        timestamp: serverTimestamp()
-      })
-    }
-  } catch (err) {
-    console.error(err)
-  }
-}
+// const createOrUpdateLastSeen = async (userId, groupId) => {
+//   try {
+//     const lastSeenRef = doc(db, 'lastSeen', userId)
+//     await setDoc(
+//       lastSeenRef,
+//       {
+//         groups: {
+//           [groupId]: serverTimestamp()
+//         }
+//       },
+//       { merge: true }
+//     )
+//   } catch (err) {
+//     console.error(err)
+//     toast.error('Error when attempting to update last seen', {
+//       position: 'top-center'
+//     })
+//   }
+// }
 
 export {
   auth,
@@ -266,6 +270,6 @@ export {
   leaveGroup,
   editGroup,
   deleteGroup,
-  createOrUpdateLastSeen,
+  // createOrUpdateLastSeen,
   logout
 }

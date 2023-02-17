@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useNavigate } from 'react-router-dom'
 import { auth, db } from '../firebase'
-import { query, collection, where, orderBy } from 'firebase/firestore'
+import { query, collection, where, orderBy, doc, getDoc } from 'firebase/firestore'
 import SidePanel from './SidePanel/SidePanel'
 import Messages from './Messages/Messages'
 import {
@@ -17,6 +17,7 @@ export default function Dashboard() {
   // State
   const [activeGroupId, setActiveGroupId] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
+  // const [lastSeen, setLastSeen] = useState(null)
 
   // Firebase Hooks
   const [groups, groupsloading] = useCollection(
@@ -58,7 +59,20 @@ export default function Dashboard() {
     { idField: 'id' }
   )
 
-  console.log('messages', messages?.docs.map((doc) => doc.data()))
+  // useEffect(() => {
+  //   if (!messages) return
+  //   const lastSeenRef = doc(db, 'lastSeen', auth.currentUser?.uid)
+  //   const getData = async () => {
+  //     const docSnap = await getDoc(lastSeenRef)
+  //     if (docSnap.exists()) {
+  //       setLastSeen(docSnap.data())
+  //     } else {
+  //       setLastSeen(null)
+  //     }
+  //   }
+  //   getData()
+  // }, [messages])
+
   // Firebase hook to check if user is logged in
   const [user, loading] = useAuthState(auth)
 
@@ -192,9 +206,11 @@ export default function Dashboard() {
           activeGroupId={activeGroupId}
           groups={groups}
           users={users}
-          messages={messages?.docs?.map((doc) => {
-            return { ...doc.data(), id: doc.id }
-          }).filter((message) => message.groupId === activeGroupId)}
+          messages={messages?.docs
+            ?.map((doc) => {
+              return { ...doc.data(), id: doc.id }
+            })
+            .filter((message) => message.groupId === activeGroupId)}
         />
       </Box>
     </Box>

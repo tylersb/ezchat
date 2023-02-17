@@ -16,11 +16,11 @@ export default function Messages({ userData, activeGroupId, groups, users, messa
     scrollToBottom()
   }, [messages])
 
-  useEffect(() => {
-    if (activeGroupId && userData) {
-      createOrUpdateLastSeen(userData.uid, activeGroupId)
-    }
-  }, [activeGroupId, userData, messages])
+  // useEffect(() => {
+  //   if (activeGroupId && userData) {
+  //     createOrUpdateLastSeen(userData.uid, activeGroupId)
+  //   }
+  // }, [activeGroupId, userData, messages])
 
   const displayMessages = messages?.map((message) => {
     return (
