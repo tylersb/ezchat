@@ -1,33 +1,39 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase'
-import {
-  TextField,
-  IconButton,
-  InputAdornment,
-  Stack,
-  Box,
-  Menu
-} from '@mui/material'
+import { TextField, IconButton, InputAdornment, Box, Menu } from '@mui/material'
 import SendSharpIcon from '@mui/icons-material/SendSharp'
 import { toast } from 'react-toastify'
 import GifBoxIcon from '@mui/icons-material/GifBox'
 import GifPicker from 'gif-picker-react'
 import FileUploadDialog from './FileUploadDialog'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
+import EmojiMenu from '../EmojiMenu'
 
 export default function MessageForm({ userData, activeGroupId }) {
   // State
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
-  const [anchorEl, setAnchorEl] = useState(null)
+  // const [open, setOpen] = useState({
+  //   gif: false,
+  //   emoji: false,
+  //   file: false
+  // })
+  const [openGif, setOpenGif] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
 
-  const open = Boolean(anchorEl)
-
   // Refs
+  const gifPickerRef = useRef(null)
 
   // Handle clicks/actions
+
+  // const handleOpen = (e) => {
+  //   setOpen({
+  //     ...open,
+  //     [e.currentTarget.name]: true
+  //   })
+  // }
+
   const handleOpenDialog = () => {
     setOpenDialog(true)
   }
@@ -59,12 +65,12 @@ export default function MessageForm({ userData, activeGroupId }) {
     }
   }
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget)
+  const handleOpenGif = () => {
+    setOpenGif(true)
   }
 
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleCloseGif = () => {
+    setOpenGif(false)
   }
 
   const handleSendGif = async (gif) => {
@@ -76,7 +82,7 @@ export default function MessageForm({ userData, activeGroupId }) {
         createdAt: serverTimestamp(),
         uid: userData.uid
       })
-      setAnchorEl(null)
+      setOpenGif(false)
     } catch (err) {
       console.error(err)
       toast.error('Error sending gif', {
@@ -101,7 +107,7 @@ export default function MessageForm({ userData, activeGroupId }) {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <IconButton onClick={handleOpenDialog}>
+                <IconButton name="file" onClick={handleOpenDialog}>
                   <AddCircleIcon />
                 </IconButton>
               </InputAdornment>
@@ -109,9 +115,14 @@ export default function MessageForm({ userData, activeGroupId }) {
             endAdornment: (
               <>
                 <InputAdornment position="end">
-                  <IconButton onClick={handleClick}>
-                    <GifBoxIcon />
+                  <IconButton name="gif" onClick={handleOpenGif}>
+                    <Box component="span" ref={gifPickerRef}>
+                      <GifBoxIcon />
+                    </Box>
                   </IconButton>
+                </InputAdornment>
+                <InputAdornment position="end">
+                  <EmojiMenu message={message} setMessage={setMessage} />
                 </InputAdornment>
                 <InputAdornment position="end">
                   <IconButton
@@ -126,31 +137,46 @@ export default function MessageForm({ userData, activeGroupId }) {
           }}
         />
       </form>
-      <Stack spacing={2} direction="row">
-        <FileUploadDialog
-          userData={userData}
-          activeGroupId={activeGroupId}
-          openDialog={openDialog}
-          handleCloseDialog={handleCloseDialog}
-        />
-        <Box>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-              sx: { p: 0 }
-            }}
-          >
-            <GifPicker
-              tenorApiKey={process.env.REACT_APP_TENOR_API_KEY}
-              onGifClick={handleSendGif}
-            />
-          </Menu>
-        </Box>
-      </Stack>
+
+      <FileUploadDialog
+        userData={userData}
+        activeGroupId={activeGroupId}
+        openDialog={openDialog}
+        handleCloseDialog={handleCloseDialog}
+      />
+      <Box>
+        <Menu
+          id="gif-picker"
+          anchorEl={
+            gifPickerRef.current ? gifPickerRef.current.parentElement : null
+          }
+          open={openGif}
+          onClose={handleCloseGif}
+          MenuListProps={{
+            'aria-labelledby': 'gif-picker',
+            sx: { p: 0 }
+          }}
+        >
+          <GifPicker
+            tenorApiKey={process.env.REACT_APP_TENOR_API_KEY}
+            onGifClick={handleSendGif}
+          />
+        </Menu>
+        {/* <Menu
+          id="emoji-picker"
+          anchorEl={
+            gifPickerRef.current ? gifPickerRef.current.parentElement.parentElement.parentElement : null
+          }
+          open={openEmoji}
+          onClose={handleCloseEmoji}
+          MenuListProps={{
+            'aria-labelledby': 'emoji-picker',
+            sx: { p: 0 }
+          }}
+        >
+          <Picker set="native" onEmojiSelect={handleEmojiSelect} data={data} />
+        </Menu> */}
+      </Box>
     </Box>
   )
 }

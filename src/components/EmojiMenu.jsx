@@ -2,24 +2,22 @@ import { useState, useRef, useEffect } from 'react'
 import {
   IconButton,
   MenuList,
-  MenuItem,
-  ListItemIcon,
-  Typography,
   Popper,
   Grow,
   Paper,
-  ClickAwayListener
+  ClickAwayListener,
+  Box
 } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import SettingsIcon from '@mui/icons-material/Settings'
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'
-import { leaveGroup } from '../firebase'
-import ConfirmationDialog from './ConfirmationDialog'
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions'
 
-export default function ChannelMenu({ userData, groupData, anchorRef, activeGroupId, setActiveGroupId }) {
+export default function EmojiMenu({ message, setMessage }) {
   // State
   const [open, setOpen] = useState(false)
-  const [openConfirm, setOpenConfirm] = useState(false)
+
+  // Refs
+  const anchorRef = useRef(null)
 
   // Event handlers
   const handleToggle = () => {
@@ -43,23 +41,8 @@ export default function ChannelMenu({ userData, groupData, anchorRef, activeGrou
     }
   }
 
-  const handleCloseConfirm = () => {
-    setOpenConfirm(false)
-  }
-
-  const handleLeaveGroup = async () => {
-    try {
-      await leaveGroup(activeGroupId, userData.uid)
-      setOpenConfirm(false)
-      setActiveGroupId('')
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const handleOpenConfirm = () => {
-    setOpenConfirm(true)
-    setOpen(false)
+  const handleEmojiSelect = (emoji) => {
+    setMessage(message + emoji.native)
   }
 
   // return focus to the button when we transitioned from !open -> open
@@ -73,24 +56,25 @@ export default function ChannelMenu({ userData, groupData, anchorRef, activeGrou
   }, [open, anchorRef])
 
   return (
-    <div>
-      <ConfirmationDialog
-        openConfirm={openConfirm}
-        handleCloseConfirm={handleCloseConfirm}
-        handleLeaveGroup={handleLeaveGroup}
-        title="Are you sure you want to leave this group?"
-      />
+    <div
+      style={{
+        margin: 0,
+        padding: 0,
+      }}
+    >
       <IconButton
         id="expand-menu"
-        aria-controls={open ? 'channel-menu' : undefined}
+        aria-controls={open ? 'emoji-picker' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleToggle}
       >
-        <ExpandMoreIcon />
+        <Box component="span" ref={anchorRef}>
+          <EmojiEmotionsIcon />
+        </Box>
       </IconButton>
       <Popper
-        id="channel-menu"
+        id="emoji-picker"
         open={open}
         anchorEl={anchorRef.current}
         role={undefined}
@@ -113,19 +97,11 @@ export default function ChannelMenu({ userData, groupData, anchorRef, activeGrou
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                      <SettingsIcon fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="inherit">Edit Channel</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleClose}></MenuItem>
-                  <MenuItem onClick={handleOpenConfirm}>
-                    <ListItemIcon>
-                      <ExitToAppIcon fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="inherit">Leave Channel</Typography>
-                  </MenuItem>
+                  <Picker
+                    set="native"
+                    onEmojiSelect={handleEmojiSelect}
+                    data={data}
+                  />
                 </MenuList>
               </ClickAwayListener>
             </Paper>
