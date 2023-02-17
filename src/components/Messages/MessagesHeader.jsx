@@ -6,7 +6,8 @@ export default function MessagesHeader({
   userData,
   activeGroupId,
   groups,
-  userEmail
+  userEmail,
+  setActiveGroupId
 }) {
   const anchorRef = useRef(null)
 
@@ -49,6 +50,8 @@ export default function MessagesHeader({
           </Box>
           <ChannelMenu userData={userData} groupData={groupData} 
           anchorRef={anchorRef}
+          activeGroupId={activeGroupId}
+          setActiveGroupId={setActiveGroupId}
           />
         </Box>
       )}

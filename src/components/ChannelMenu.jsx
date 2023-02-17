@@ -15,10 +15,14 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import SettingsIcon from '@mui/icons-material/Settings'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import { leaveGroup } from '../firebase'
+import ConfirmationDialog from './ConfirmationDialog'
 
-export default function ChannelMenu({ userData, groupData, anchorRef }, props) {
+export default function ChannelMenu({ userData, groupData, anchorRef, activeGroupId, setActiveGroupId }) {
+  // State
   const [open, setOpen] = useState(false)
+  const [openConfirm, setOpenConfirm] = useState(false)
 
+  // Event handlers
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
   }
@@ -40,6 +44,25 @@ export default function ChannelMenu({ userData, groupData, anchorRef }, props) {
     }
   }
 
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false)
+  }
+
+  const handleLeaveGroup = async () => {
+    try {
+      await leaveGroup(activeGroupId, userData.uid)
+      setOpenConfirm(false)
+      setActiveGroupId('')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true)
+    setOpen(false)
+  }
+
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = useRef(open)
   useEffect(() => {
@@ -52,6 +75,12 @@ export default function ChannelMenu({ userData, groupData, anchorRef }, props) {
 
   return (
     <div>
+      <ConfirmationDialog
+        openConfirm={openConfirm}
+        handleCloseConfirm={handleCloseConfirm}
+        handleLeaveGroup={handleLeaveGroup}
+        title="Are you sure you want to leave this group?"
+      />
       <IconButton
         id="expand-menu"
         aria-controls={open ? 'channel-menu' : undefined}
@@ -92,7 +121,7 @@ export default function ChannelMenu({ userData, groupData, anchorRef }, props) {
                     <Typography variant="inherit">Edit Channel</Typography>
                   </MenuItem>
                   <MenuItem onClick={handleClose}></MenuItem>
-                  <MenuItem onClick={handleClose}>
+                  <MenuItem onClick={handleOpenConfirm}>
                     <ListItemIcon>
                       <ExitToAppIcon fontSize="small" />
                     </ListItemIcon>

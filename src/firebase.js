@@ -18,7 +18,10 @@ import {
   getDocs,
   collection,
   where,
-  addDoc
+  addDoc,
+  doc,
+  updateDoc,
+  arrayRemove
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import md5 from 'md5'
@@ -176,23 +179,17 @@ const logout = () => {
 
 const leaveGroup = async (groupId, userId) => {
   try {
-    const q = query(
-      collection(db, 'channels', groupId, 'users'),
-      where('uid', '==', userId)
-    )
-    const docs = await getDocs(q)
-    if (docs.docs.length > 0) {
-      const doc = docs.docs[0]
-      await doc.ref.delete()
-    }
+    const groupRef = doc(db, 'groups', groupId)
+    await updateDoc(groupRef, {
+      users: arrayRemove(userId)
+    })
   } catch (err) {
     console.error(err)
-    toast.error(err.message, {
+    toast.error('Error when attempting to leave group', {
       position: 'top-center'
     })
   }
 }
-
 
 export {
   auth,

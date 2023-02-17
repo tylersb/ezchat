@@ -112,6 +112,7 @@ export default function Dashboard() {
             activeGroupId={activeGroupId}
             groups={groups}
             userEmail={userEmail}
+            setActiveGroupId={setActiveGroupId}
           />
         </Toolbar>
       </AppBar>
