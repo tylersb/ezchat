@@ -11,12 +11,18 @@ import {
   ClickAwayListener
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import SettingsIcon from '@mui/icons-material/Settings'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import { leaveGroup } from '../firebase'
 import ConfirmationDialog from './ConfirmationDialog'
+import EditChannelInterface from './EditChannelInterface'
 
-export default function ChannelMenu({ userData, groupData, anchorRef, activeGroupId, setActiveGroupId }) {
+export default function ChannelMenu({
+  userData,
+  groupData,
+  anchorRef,
+  activeGroupId,
+  setActiveGroupId
+}) {
   // State
   const [open, setOpen] = useState(false)
   const [openConfirm, setOpenConfirm] = useState(false)
@@ -113,12 +119,10 @@ export default function ChannelMenu({ userData, groupData, anchorRef, activeGrou
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                      <SettingsIcon fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="inherit">Edit Channel</Typography>
-                  </MenuItem>
+                  <EditChannelInterface
+                    handleCloseMenu={handleClose}
+                    groupData={groupData}
+                  />
                   <MenuItem onClick={handleClose}></MenuItem>
                   <MenuItem onClick={handleOpenConfirm}>
                     <ListItemIcon>
