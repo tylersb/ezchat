@@ -1,8 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useNavigate } from 'react-router-dom'
 import { auth, db } from '../firebase'
-import { query, collection, where, orderBy, doc, getDoc } from 'firebase/firestore'
+import {
+  query,
+  collection,
+  where,
+  orderBy,
+  doc,
+  getDoc
+} from 'firebase/firestore'
 import SidePanel from './SidePanel/SidePanel'
 import Messages from './Messages/Messages'
 import {
@@ -22,11 +29,12 @@ export default function Dashboard() {
   // Firebase Hooks
   const [groups, groupsloading] = useCollection(
     query(
-      collection(db, 'groups'),
+      collection(db, 'groups')
       // where('users', 'array-contains', auth.currentUser?.uid || null)
     ),
     { idField: 'id' }
   )
+  
   const [userData, userDataLoading] = useCollectionData(
     query(
       collection(db, 'users'),
@@ -43,19 +51,25 @@ export default function Dashboard() {
     { idField: 'uid' }
   )
 
-  const userGroups = []
-  groups?.docs?.forEach((group) => {
-    userGroups.push(group.id)
-  })
+  const userGroups = useMemo(() => {
+    if (!userData?.[0]?.groups) return []
+    return userData?.[0]?.groups
+  }, [userData])
 
   const whereValue = userGroups?.length > 0 ? 'in' : '=='
 
+  const messageQuery = useMemo(
+    () =>
+      query(
+        collection(db, 'messages'),
+        orderBy('createdAt'),
+        where('groupId', whereValue, userGroups || activeGroupId)
+      ),
+    [activeGroupId, userGroups, whereValue]
+  )
+
   const [messages, messagesLoading, messagesError] = useCollection(
-    query(
-      collection(db, 'messages'),
-      orderBy('createdAt'),
-      where('groupId', whereValue, userGroups || activeGroupId)
-    ),
+    messageQuery,
     { idField: 'id' }
   )
 
