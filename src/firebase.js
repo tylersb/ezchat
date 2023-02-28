@@ -23,7 +23,8 @@ import {
   updateDoc,
   arrayRemove,
   writeBatch,
-  serverTimestamp
+  serverTimestamp,
+  arrayUnion
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import md5 from 'md5'

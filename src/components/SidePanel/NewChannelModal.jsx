@@ -6,10 +6,11 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  Stack
 } from '@mui/material'
 import { Add } from '@mui/icons-material'
-import { addNewChannel } from '../../firebase'
+import { addNewChannel, joinChannel } from '../../firebase'
 
 export default function NewChannelModal({ userData }) {
   const [open, setOpen] = useState(false)
@@ -17,6 +18,7 @@ export default function NewChannelModal({ userData }) {
     name: '',
     description: ''
   })
+  const [channelId, setChannelId] = useState('')
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -32,6 +34,12 @@ export default function NewChannelModal({ userData }) {
     setOpen(false)
   }
 
+  const handleJoin = () => {
+    joinChannel(channelId, userData?.uid)
+    setChannelId('')
+    setOpen(false)
+  }
+
   return (
     <>
       <Button
@@ -42,8 +50,25 @@ export default function NewChannelModal({ userData }) {
         <Add />
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Create a new channel</DialogTitle>
+        <DialogTitle>Join a Channel or Create a New One</DialogTitle>
         <DialogContent>
+          <DialogContentText>
+            Please enter the Channel ID you want to join
+          </DialogContentText>
+          <Stack direction="row">
+            <TextField
+              autoFocus
+              margin="dense"
+              id="channelId"
+              label="Channel ID"
+              type="text"
+              fullWidth
+              autoComplete="off"
+              value={channelId}
+              onChange={(e) => setChannelId(e.target.value)}
+            />
+            <Button onClick={handleJoin}>Join</Button>
+          </Stack>
           <DialogContentText>
             Please enter a name and description for the new channel
           </DialogContentText>
