@@ -29,7 +29,6 @@ import {
 import { getStorage } from 'firebase/storage'
 import md5 from 'md5'
 import { toast } from 'react-toastify'
-import _ from 'lodash'
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,

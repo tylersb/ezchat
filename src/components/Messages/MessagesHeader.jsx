@@ -2,7 +2,6 @@ import { Typography, Box, Skeleton } from '@mui/material'
 import ChannelMenu from '../ChannelMenu'
 import { useRef, useState } from 'react'
 import EditChannelInterface from '../EditChannelInterface'
-import { act } from 'react-dom/test-utils'
 
 export default function MessagesHeader({
   userData,

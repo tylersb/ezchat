@@ -2,12 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useNavigate } from 'react-router-dom'
 import { auth, db } from '../firebase'
-import {
-  query,
-  collection,
-  where,
-  orderBy
-} from 'firebase/firestore'
+import { query, collection, where, orderBy } from 'firebase/firestore'
 import SidePanel from './SidePanel/SidePanel'
 import Messages from './Messages/Messages'
 import {
@@ -25,20 +20,28 @@ export default function Dashboard() {
   // const [lastSeen, setLastSeen] = useState(null)
 
   // Firebase Hooks
-  const [groups, groupsloading] = useCollection(
-    query(
-      collection(db, 'groups')
-      // where('users', 'array-contains', auth.currentUser?.uid || null)
-    ),
-    { idField: 'id' }
+  const [user, loading] = useAuthState(auth)
+
+  // Admin query for showing all groups
+  let groupsQuery = query(
+    collection(db, 'groups'),
+    where('users', 'array-contains', auth?.currentUser?.uid || null)
   )
-  
+
+  if (auth?.currentUser?.uid === 'nIFs6wTI9QTT8NzQafzrPcbEyK62') {
+    groupsQuery = query(collection(db, 'groups'))
+  }
+
+  const [groups, groupsloading] = useCollection(groupsQuery, { idField: 'id' })
+
   const [userData, userDataLoading] = useCollectionData(
     query(
       collection(db, 'users'),
-      where('uid', '==', auth.currentUser?.uid || null)
+      where('uid', '==', auth?.currentUser?.uid || null)
     ),
-    { idField: 'uid' }
+    {
+      idField: 'uid'
+    }
   )
 
   const [users] = useCollectionData(
@@ -69,10 +72,7 @@ export default function Dashboard() {
     [activeGroupId, userGroups, whereValue]
   )
 
-  const [messages, messagesLoading, messagesError] = useCollection(
-    messageQuery,
-    { idField: 'id' }
-  )
+  const [messages] = useCollection(messageQuery, { idField: 'id' })
 
   // useEffect(() => {
   //   if (!messages) return
@@ -87,9 +87,6 @@ export default function Dashboard() {
   //   }
   //   getData()
   // }, [messages])
-
-  // Firebase hook to check if user is logged in
-  const [user, loading] = useAuthState(auth)
 
   // React Router hook to navigate to different pages
   const navigate = useNavigate()
