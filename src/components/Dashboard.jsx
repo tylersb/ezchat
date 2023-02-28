@@ -74,8 +74,6 @@ export default function Dashboard() {
     { idField: 'id' }
   )
 
-  console.log(userData)
-
   // useEffect(() => {
   //   if (!messages) return
   //   const lastSeenRef = doc(db, 'lastSeen', auth.currentUser?.uid)

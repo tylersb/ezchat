@@ -2,6 +2,7 @@ import { Typography, Box, Skeleton } from '@mui/material'
 import ChannelMenu from '../ChannelMenu'
 import { useRef, useState } from 'react'
 import EditChannelInterface from '../EditChannelInterface'
+import { act } from 'react-dom/test-utils'
 
 export default function MessagesHeader({
   userData,
@@ -60,6 +61,7 @@ export default function MessagesHeader({
           />
         </Box>
       )}
+      <Typography variant="subtitle2">Channel ID: {activeGroupId}</Typography>
       <Typography variant="subtitle2">{totalMembers} Users</Typography>
       <EditChannelInterface openEdit={openEdit} setOpenEdit={setOpenEdit} groupData={groupData}
       activeGroupId={activeGroupId}
