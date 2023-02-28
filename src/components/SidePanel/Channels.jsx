@@ -1,26 +1,8 @@
-import { db } from '../../firebase'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import NewChannelModal from './NewChannelModal'
 import { Box, Typography, Button } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
-import { toast } from 'react-toastify'
 
 export default function Channels({ handleGroupClick, userData, groups }) {
-  const addNewChannel = async (channel) => {
-    try {
-      await addDoc(collection(db, 'groups'), {
-        ...channel,
-        createdAt: serverTimestamp(),
-        users: [userData?.uid],
-        createdByUid: userData?.uid,
-        type: 'channel'
-      })
-    } catch (err) {
-      console.error(err)
-      toast.error('An error occured while creating a new channel')
-    }
-  }
-
   const displayChannels = groups?.docs?.map((channel) => {
     const channelData = channel.data()
     if (channelData.type !== 'channel') return null
@@ -61,7 +43,9 @@ export default function Channels({ handleGroupClick, userData, groups }) {
           <Typography variant="h6" sx={{ marginLeft: '1em' }}>
             Channels
           </Typography>
-          <NewChannelModal addNewChannel={addNewChannel} />
+          <NewChannelModal 
+          userData={userData}
+          />
         </Box>
       </Box>
       <Box>{displayChannels}</Box>

@@ -9,8 +9,9 @@ import {
   DialogTitle
 } from '@mui/material'
 import { Add } from '@mui/icons-material'
+import { addNewChannel } from '../../firebase'
 
-export default function NewChannelModal({ addNewChannel }) {
+export default function NewChannelModal({ userData }) {
   const [open, setOpen] = useState(false)
   const [channel, setChannel] = useState({
     name: '',
@@ -26,7 +27,7 @@ export default function NewChannelModal({ addNewChannel }) {
   }
 
   const handleSubmit = () => {
-    addNewChannel(channel)
+    addNewChannel(channel, userData?.uid)
     setChannel({ name: '', description: '' })
     setOpen(false)
   }

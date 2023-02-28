@@ -22,7 +22,8 @@ import {
   doc,
   updateDoc,
   arrayRemove,
-  writeBatch
+  writeBatch,
+  serverTimestamp
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import md5 from 'md5'
@@ -258,6 +259,33 @@ const deleteGroup = async (groupId) => {
 //     })
 //   }
 // }
+
+export const addNewChannel = async (channel, userId) => {
+  try {
+    await addDoc(collection(db, 'groups'), {
+      ...channel,
+      createdAt: serverTimestamp(),
+      users: [userId],
+      createdByUid: userId,
+      type: 'channel'
+    })
+  } catch (err) {
+    console.error(err)
+    toast.error('An error occured while creating a new channel')
+  }
+}
+
+export const joinChannel = async (channelId, userId) => {
+  try {
+    const channelRef = doc(db, 'groups', channelId)
+    await updateDoc(channelRef, {
+      users: arrayUnion(userId)
+    })
+  } catch (err) {
+    console.error(err)
+    toast.error('An error occured while joining a channel')
+  }
+}
 
 export {
   auth,
