@@ -4,6 +4,8 @@ A chat app that includes channels for group discussions as well as direct messag
 
 ![chatapp](./public/chatapp.png)
 
+Live Site: https://chat.tylerbenbrook.com
+
 ## Tech Stack
 - Nodejs
 - React
