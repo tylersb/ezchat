@@ -6,9 +6,7 @@ import {
   query,
   collection,
   where,
-  orderBy,
-  doc,
-  getDoc
+  orderBy
 } from 'firebase/firestore'
 import SidePanel from './SidePanel/SidePanel'
 import Messages from './Messages/Messages'
@@ -52,9 +50,12 @@ export default function Dashboard() {
   )
 
   const userGroups = useMemo(() => {
-    if (!userData?.[0]?.groups) return []
-    return userData?.[0]?.groups
-  }, [userData])
+    const userGroups = []
+    groups?.docs?.forEach((group) => {
+      userGroups.push(group.id)
+    })
+    return userGroups
+  }, [groups])
 
   const whereValue = userGroups?.length > 0 ? 'in' : '=='
 
@@ -72,6 +73,8 @@ export default function Dashboard() {
     messageQuery,
     { idField: 'id' }
   )
+
+  console.log(userData)
 
   // useEffect(() => {
   //   if (!messages) return

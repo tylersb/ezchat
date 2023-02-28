@@ -22,15 +22,7 @@ import {
   doc,
   updateDoc,
   arrayRemove,
-  deleteDoc,
-  batch,
-  writeBatch,
-  arrayUnion,
-  serverTimestamp,
-  getDoc,
-  setDoc,
-  FieldPath,
-  orderBy
+  writeBatch
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import md5 from 'md5'
@@ -70,6 +62,7 @@ const getGravatarURL = (email) => {
   return `https://www.gravatar.com/avatar/${hash}?d=identicon`
 }
 
+// Function for signing in anonymously
 const logInAnonymously = async () => {
   try {
     const res = await signInAnonymously(auth)
@@ -93,6 +86,7 @@ const logInAnonymously = async () => {
   }
 }
 
+// Function for signing in with Google as the provider
 const signInWithGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider)
@@ -116,6 +110,7 @@ const signInWithGoogle = async () => {
   }
 }
 
+// Function for signing in with Github as the provider
 const signInWithGithub = async () => {
   try {
     const res = await signInWithPopup(auth, githubProvider)
@@ -139,6 +134,7 @@ const signInWithGithub = async () => {
   }
 }
 
+// Function for signing in with email and password
 const logInWithEmailAndPassword = async (email, password) => {
   try {
     await signInWithEmailAndPassword(auth, email, password)
@@ -150,6 +146,7 @@ const logInWithEmailAndPassword = async (email, password) => {
   }
 }
 
+// Function for registering with email and password
 const registerWithEmailAndPassword = async (name, email, password) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password)
@@ -169,6 +166,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
   }
 }
 
+// Function for sending a password reset email
 const sendPasswordReset = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email)
@@ -183,10 +181,12 @@ const sendPasswordReset = async (email) => {
   }
 }
 
+// Function for logging the user out
 const logout = () => {
   signOut(auth)
 }
 
+// Function for removing the user from a group
 const leaveGroup = async (groupId, userId) => {
   try {
     const groupRef = doc(db, 'groups', groupId)
@@ -201,6 +201,7 @@ const leaveGroup = async (groupId, userId) => {
   }
 }
 
+// Function for editing a group
 const editGroup = async (groupId, { name, description }) => {
   try {
     console.log(name, description, groupId)
@@ -217,6 +218,7 @@ const editGroup = async (groupId, { name, description }) => {
   }
 }
 
+// Function for deleting a group
 const deleteGroup = async (groupId) => {
   try {
     const groupRef = doc(db, 'groups', groupId)
