@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react'
+import { useState } from 'react'
 import { SwipeableDrawer, Button } from '@mui/material'
 
 export default function MetaPanelDrawer({ groupData }) {
@@ -9,7 +9,7 @@ export default function MetaPanelDrawer({ groupData }) {
   }
 
   return (
-    <Fragment>
+    <>
       <Button onClick={toggleDrawer(true)}>Open Right</Button>
       <SwipeableDrawer
         anchor="right"
@@ -19,6 +19,6 @@ export default function MetaPanelDrawer({ groupData }) {
       >
         <div>Drawer</div>
       </SwipeableDrawer>
-    </Fragment>
+    </>
   )
 }

@@ -1,5 +1,4 @@
 import MessageForm from './MessageForm'
-import { createOrUpdateLastSeen } from '../../firebase'
 import Message from './Message'
 import { Box, List } from '@mui/material'
 import { useRef, useEffect } from 'react'

@@ -7,7 +7,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Stack
+  Stack,
+  Divider
 } from '@mui/material'
 import { Add } from '@mui/icons-material'
 import { addNewChannel, joinChannel } from '../../firebase'
@@ -53,7 +54,7 @@ export default function NewChannelModal({ userData }) {
         <DialogTitle>Join a Channel or Create a New One</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter the Channel ID you want to join
+            Please enter a Channel ID then click Join to join an existing channel
           </DialogContentText>
           <Stack direction="row">
             <TextField
@@ -69,8 +70,11 @@ export default function NewChannelModal({ userData }) {
             />
             <Button onClick={handleJoin}>Join</Button>
           </Stack>
+          <Divider 
+            sx={{ my: 2 }}
+          />
           <DialogContentText>
-            Please enter a name and description for the new channel
+            If you'd like to create a brand new channel instead of joining an existing one, please enter the details below then click Create
           </DialogContentText>
           <TextField
             margin="dense"
