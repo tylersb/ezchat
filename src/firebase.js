@@ -26,11 +26,15 @@ import {
   serverTimestamp,
   arrayUnion
 } from 'firebase/firestore'
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL
+} from 'firebase/storage'
 import md5 from 'md5'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
-
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -262,14 +266,14 @@ const deleteGroup = async (groupId) => {
 //   }
 // }
 
-export const addNewChannel = async (channel, userId) => {
+export const addNewGroup = async (users, createdByUid, type, channelInfo) => {
   try {
     await addDoc(collection(db, 'groups'), {
-      ...channel,
       createdAt: serverTimestamp(),
-      users: [userId],
-      createdByUid: userId,
-      type: 'channel'
+      users,
+      createdByUid,
+      type,
+      ...channelInfo,
     })
   } catch (err) {
     console.error(err)
@@ -289,37 +293,36 @@ export const joinChannel = async (channelId, userId) => {
   }
 }
 
-export const uploadFile = async (file, groupId, uid ) => {
+export const uploadFile = async (file, groupId, uid) => {
   try {
-  const storageRef = ref(storage, `images/${uuidv4()}-${file.name}`)
-      const uploadTask = uploadBytesResumable(storageRef, file)
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          )
-        },
-        (error) => {
-          console.error(error)
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            addDoc(collection(db, 'messages'), {
-              groupId,
-              content: downloadURL,
-              type: 'image',
-              createdAt: serverTimestamp(),
-              uid
-            })
+    const storageRef = ref(storage, `images/${uuidv4()}-${file.name}`)
+    const uploadTask = uploadBytesResumable(storageRef, file)
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        )
+      },
+      (error) => {
+        console.error(error)
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          addDoc(collection(db, 'messages'), {
+            groupId,
+            content: downloadURL,
+            type: 'image',
+            createdAt: serverTimestamp(),
+            uid
           })
-          toast.success('File uploaded successfully', {
-            position: 'top-center'
-          })
-        }
-      )
-}
-  catch (err) {
+        })
+        toast.success('File uploaded successfully', {
+          position: 'top-center'
+        })
+      }
+    )
+  } catch (err) {
     console.error(err)
     toast.error('An error occured while uploading a file')
   }
@@ -339,7 +342,6 @@ export const addNewMessage = async (content, groupId, uid, type) => {
     toast.error('An error occured while sending a message')
   }
 }
-
 
 export {
   auth,

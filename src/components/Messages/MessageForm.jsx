@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { addNewMessage } from '../../firebase'
 import { TextField, IconButton, InputAdornment, Box, Menu } from '@mui/material'
 import SendSharpIcon from '@mui/icons-material/SendSharp'

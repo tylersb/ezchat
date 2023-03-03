@@ -1,5 +1,4 @@
-import { db } from '../../firebase'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { addNewGroup } from '../../firebase'
 import NewDirectMessageModal from './NewDirectMessageModal'
 import { Box, Typography, Button } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
@@ -13,12 +12,7 @@ export default function DirectMessages({
 }) {
   const addNewDirectMessage = async (uid) => {
     try {
-      const newDirectMessage = await addDoc(collection(db, 'groups'), {
-        createdAt: serverTimestamp(),
-        users: [userData?.uid, uid],
-        createdByUid: userData?.uid,
-        type: 'directMessage'
-      })
+      const newDirectMessage = await addNewGroup([userData?.uid, uid], userData?.uid, 'directMessage')
       handleGroupClick(newDirectMessage)
     } catch (err) {
       console.error(err)

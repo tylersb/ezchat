@@ -11,7 +11,7 @@ import {
   Divider
 } from '@mui/material'
 import { Add } from '@mui/icons-material'
-import { addNewChannel, joinChannel } from '../../firebase'
+import { addNewGroup, joinChannel } from '../../firebase'
 
 export default function NewChannelModal({ userData }) {
   const [open, setOpen] = useState(false)
@@ -30,7 +30,7 @@ export default function NewChannelModal({ userData }) {
   }
 
   const handleSubmit = () => {
-    addNewChannel(channel, userData?.uid)
+    addNewGroup([userData?.uid], userData.uid, 'channel', channel)
     setChannel({ name: '', description: '' })
     setOpen(false)
   }
