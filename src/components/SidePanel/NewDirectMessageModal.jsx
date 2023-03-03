@@ -3,10 +3,13 @@ import { Button, Dialog, TextField, DialogTitle } from '@mui/material'
 import { Add } from '@mui/icons-material'
 import { findUserByEmail } from '../../firebase'
 import { toast } from 'react-toastify'
+import { useTheme } from '@mui/material/styles'
 
 export default function NewDirectMessageModal({ addNewDirectMessage }) {
   const [open, setOpen] = useState(false)
   const [userEmail, setUserEmail] = useState('')
+
+  const theme = useTheme()
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -41,7 +44,7 @@ export default function NewDirectMessageModal({ addNewDirectMessage }) {
         sx={{ background: 'transparent', color: 'white' }}
         floated="right"
       >
-        <Add />
+        <Add sx={theme.palette.mode === 'light' && { color: 'black' }} />
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle textAlign="center">

@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 import { Add } from '@mui/icons-material'
 import { addNewGroup, joinChannel } from '../../firebase'
+import { useTheme } from '@mui/material/styles'
 
 export default function NewChannelModal({ userData }) {
   const [open, setOpen] = useState(false)
@@ -20,6 +21,8 @@ export default function NewChannelModal({ userData }) {
     description: ''
   })
   const [channelId, setChannelId] = useState('')
+
+  const theme = useTheme()
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -48,13 +51,14 @@ export default function NewChannelModal({ userData }) {
         sx={{ background: 'transparent', color: 'white' }}
         floated="right"
       >
-        <Add />
+        <Add sx={theme.palette.mode === 'light' && { color: 'black' }} />
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Join a Channel or Create a New One</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter a Channel ID then click Join to join an existing channel
+            Please enter a Channel ID then click Join to join an existing
+            channel
           </DialogContentText>
           <Stack direction="row">
             <TextField
@@ -70,11 +74,10 @@ export default function NewChannelModal({ userData }) {
             />
             <Button onClick={handleJoin}>Join</Button>
           </Stack>
-          <Divider 
-            sx={{ my: 2 }}
-          />
+          <Divider sx={{ my: 2 }} />
           <DialogContentText>
-            If you'd like to create a brand new channel instead of joining an existing one, please enter the details below then click Create
+            If you'd like to create a brand new channel instead of joining an
+            existing one, please enter the details below then click Create
           </DialogContentText>
           <TextField
             margin="dense"
