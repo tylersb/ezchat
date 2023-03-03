@@ -113,6 +113,11 @@ export default function Dashboard() {
 
   const userEmail = (uid) => {
     const foundUser = users?.find((checkUser) => checkUser.uid === uid)
+    if(
+      foundUser?.authProvider === 'anonymous'
+    ) {
+      return foundUser?.uid
+    }
     return foundUser?.email
   }
 
