@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Button, Dialog, TextField, DialogTitle } from '@mui/material'
 import { Add } from '@mui/icons-material'
-import { db } from '../../firebase'
-import { getDocs, where, query, collection } from 'firebase/firestore'
+import { findUserByEmail } from '../../firebase'
 import { toast } from 'react-toastify'
 
 export default function NewDirectMessageModal({ addNewDirectMessage }) {
@@ -20,18 +19,11 @@ export default function NewDirectMessageModal({ addNewDirectMessage }) {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault()
-      const userRef = query(
-        collection(db, 'users'),
-        where('email', '==', userEmail.toLowerCase().trim())
-      )
-      const userDoc = (await getDocs(userRef)).docs[0].data()
-      if (!userDoc) {
-        toast.error('No user found with that email', {
-          position: 'top-center'
-        })
+      const foundUserId = await findUserByEmail(userEmail)
+      if (!foundUserId) {
         return
       }
-      addNewDirectMessage(userDoc.uid)
+      addNewDirectMessage(foundUserId)
       setOpen(false)
       setUserEmail('')
     } catch (error) {

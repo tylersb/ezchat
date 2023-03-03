@@ -343,6 +343,26 @@ export const addNewMessage = async (content, groupId, uid, type) => {
   }
 }
 
+export const findUserByEmail = async (email) => {
+  try {
+    const userRef = query(
+      collection(db, 'users'),
+      where('email', '==', email.toLowerCase().trim())
+    )
+    const userDoc = (await getDocs(userRef)).docs[0].data()
+    if (!userDoc) {
+      toast.error('No user found with that email', {
+        position: 'top-center'
+      })
+      return
+    }
+    return userDoc.uid
+  } catch (err) {
+    console.error(err)
+    toast.error('An error occured while finding a user')
+  }
+}
+
 export {
   auth,
   db,
