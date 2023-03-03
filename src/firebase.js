@@ -26,9 +26,11 @@ import {
   serverTimestamp,
   arrayUnion
 } from 'firebase/firestore'
-import { getStorage } from 'firebase/storage'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import md5 from 'md5'
 import { toast } from 'react-toastify'
+import { v4 as uuidv4 } from 'uuid'
+
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -285,6 +287,36 @@ export const joinChannel = async (channelId, userId) => {
     console.error(err)
     toast.error('An error occured while joining a channel')
   }
+}
+
+export const uploadFile = async (file, groupId, uid ) => {
+  const storageRef = ref(storage, `images/${uuidv4()}-${file.name}`)
+      const uploadTask = uploadBytesResumable(storageRef, file)
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          )
+        },
+        (error) => {
+          console.error(error)
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            addDoc(collection(db, 'messages'), {
+              groupId,
+              content: downloadURL,
+              type: 'image',
+              createdAt: serverTimestamp(),
+              uid
+            })
+          })
+          toast.success('File uploaded successfully', {
+            position: 'top-center'
+          })
+        }
+      )
 }
 
 export {
