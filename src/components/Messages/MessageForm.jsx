@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import { db } from '../../firebase'
+import { addNewMessage } from '../../firebase'
 import { TextField, IconButton, InputAdornment, Box, Menu } from '@mui/material'
 import SendSharpIcon from '@mui/icons-material/SendSharp'
 import { toast } from 'react-toastify'
@@ -34,13 +34,7 @@ export default function MessageForm({ userData, activeGroupId }) {
     if (!message.trim()) return
     setLoading(true)
     try {
-      await addDoc(collection(db, 'messages'), {
-        groupId: activeGroupId,
-        content: message,
-        type: 'text',
-        createdAt: serverTimestamp(),
-        uid: userData.uid
-      })
+      await addNewMessage(message, activeGroupId, userData.uid, 'text')
       setMessage('')
       setLoading(false)
     } catch (err) {
@@ -62,13 +56,7 @@ export default function MessageForm({ userData, activeGroupId }) {
 
   const handleSendGif = async (gif) => {
     try {
-      await addDoc(collection(db, 'messages'), {
-        groupId: activeGroupId,
-        content: gif,
-        type: 'gif',
-        createdAt: serverTimestamp(),
-        uid: userData.uid
-      })
+      await addNewMessage(gif, activeGroupId, userData.uid, 'gif')
       setOpenGif(false)
     } catch (err) {
       console.error(err)

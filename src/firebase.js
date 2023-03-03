@@ -290,6 +290,7 @@ export const joinChannel = async (channelId, userId) => {
 }
 
 export const uploadFile = async (file, groupId, uid ) => {
+  try {
   const storageRef = ref(storage, `images/${uuidv4()}-${file.name}`)
       const uploadTask = uploadBytesResumable(storageRef, file)
       uploadTask.on(
@@ -318,6 +319,27 @@ export const uploadFile = async (file, groupId, uid ) => {
         }
       )
 }
+  catch (err) {
+    console.error(err)
+    toast.error('An error occured while uploading a file')
+  }
+}
+
+export const addNewMessage = async (content, groupId, uid, type) => {
+  try {
+    await addDoc(collection(db, 'messages'), {
+      groupId,
+      content,
+      type,
+      createdAt: serverTimestamp(),
+      uid
+    })
+  } catch (err) {
+    console.error(err)
+    toast.error('An error occured while sending a message')
+  }
+}
+
 
 export {
   auth,
