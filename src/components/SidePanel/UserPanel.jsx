@@ -81,7 +81,11 @@ export default function UserPanel({ userData, handleLogout }) {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <Stack mb={-1}>
-          <Typography variant="body1">Logged in as {userData?.name}</Typography>
+          <Typography variant="body1"
+            sx={{
+              padding: 1
+            }}
+          >Logged in as {userData?.name}</Typography>
           <Button sx={{ mt: 1 }} onClick={handleLogout}>
             Logout
           </Button>
