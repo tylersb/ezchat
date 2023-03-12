@@ -273,7 +273,7 @@ export const addNewGroup = async (users, createdByUid, type, channelInfo) => {
       users,
       createdByUid,
       type,
-      ...channelInfo,
+      ...channelInfo
     })
   } catch (err) {
     console.error(err)
@@ -360,6 +360,20 @@ export const findUserByEmail = async (email) => {
   } catch (err) {
     console.error(err)
     toast.error('An error occured while finding a user')
+  }
+}
+
+export const saveUserTheme = async (theme) => {
+  try {
+    const userRef = collection(db, 'users')
+    const q = query(userRef, where('uid', '==', auth.currentUser.uid))
+    const userDoc = (await getDocs(q)).docs[0].ref
+    await updateDoc(userDoc, {
+      theme
+    })
+  } catch (err) {
+    console.error(err)
+    toast.error('An error occured while saving your theme')
   }
 }
 
