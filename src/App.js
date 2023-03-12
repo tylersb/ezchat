@@ -12,14 +12,31 @@ import { useState, useEffect, useMemo } from 'react'
 import { ColorModeContext } from './components/contexts/ColorModeContext'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
+import { auth, db } from './firebase'
+import { query, collection, where } from 'firebase/firestore'
+import { useCollectionData } from 'react-firebase-hooks/firestore'
 
 function App() {
+  const [userData, userDataLoading] = useCollectionData(
+    query(
+      collection(db, 'users'),
+      where('uid', '==', auth?.currentUser?.uid || null)
+    ),
+    {
+      idField: 'uid'
+    }
+  )
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
   const [mode, setMode] = useState()
 
   useEffect(() => {
-    setMode(prefersDarkMode ? 'dark' : 'light')
-  }, [prefersDarkMode])
+    if (userData?.[0]?.theme) {
+      setMode(userData?.[0]?.theme)
+    } else {
+      setMode(prefersDarkMode ? 'dark' : 'light')
+    }
+  }, [prefersDarkMode, userData])
 
   const colorMode = useMemo(
     () => ({
@@ -63,9 +80,25 @@ function App() {
         <ToastContainer />
         <Router>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route
+              path="/"
+              element={
+                <Dashboard
+                  userData={userData}
+                  userDataLoading={userDataLoading}
+                />
+              }
+            />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/*" element={<Dashboard />} />
+            <Route
+              path="/*"
+              element={
+                <Dashboard
+                  userData={userData}
+                  userDataLoading={userDataLoading}
+                />
+              }
+            />
           </Routes>
         </Router>
       </ThemeProvider>

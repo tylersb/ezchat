@@ -13,7 +13,9 @@ import { Box, AppBar, IconButton, Drawer, Toolbar } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import MessagesHeader from './Messages/MessagesHeader'
 
-export default function Dashboard() {
+export default function Dashboard(
+  {userData, userDataLoading }
+) {
   // State
   const [activeGroupId, setActiveGroupId] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -34,15 +36,15 @@ export default function Dashboard() {
 
   const [groups, groupsloading] = useCollection(groupsQuery, { idField: 'id' })
 
-  const [userData, userDataLoading] = useCollectionData(
-    query(
-      collection(db, 'users'),
-      where('uid', '==', auth?.currentUser?.uid || null)
-    ),
-    {
-      idField: 'uid'
-    }
-  )
+  // const [userData, userDataLoading] = useCollectionData(
+  //   query(
+  //     collection(db, 'users'),
+  //     where('uid', '==', auth?.currentUser?.uid || null)
+  //   ),
+  //   {
+  //     idField: 'uid'
+  //   }
+  // )
 
   const [users] = useCollectionData(
     query(
